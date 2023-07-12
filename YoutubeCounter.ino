@@ -1,6 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 #include <TFT_eSPI.h>
-#include "font/FLIPclockblack80pt7b.h"""
+#include "font/FLIPclockblack80pt7b.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
@@ -8,7 +8,7 @@
 #define PIN 12
 #define NUMPIXELS 2
 
-TFT_eSPI tft = TFT_eSPI();
+    TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 
@@ -25,8 +25,7 @@ void setup()
     tft.begin();
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
-    tft.setFreeFont(&FLIPclockblack80pt7b);
-    tft.drawString("9999", 60, 80);
+    drawCenteredString("9999", &FLIPclockblack80pt7b);
 }
 
 void loop()
@@ -47,4 +46,25 @@ void loop()
     pixels.clear();
     pixels.show();
     delay(DELAYVAL);
+}
+
+void drawCenteredString(const String &text, const GFXfont *f)
+{
+    // Set the desired font
+    tft.setFreeFont(f);
+
+    // Get the width and height of the display
+    int displayWidth = tft.width();
+    int displayHeight = tft.height();
+
+    // Calculate the width of the text string
+    int textWidth = tft.textWidth(text);
+    int textHeight = 160; // tft.fontHeight();
+
+    // Calculate the position to center the text
+    int cursorX = (displayWidth - textWidth) / 2;
+    int cursorY = (displayHeight - textHeight) / 2; 
+
+    // Draw the text
+    tft.drawString(text, cursorX, cursorY);
 }
