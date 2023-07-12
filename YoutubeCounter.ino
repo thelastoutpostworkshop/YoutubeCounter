@@ -1,6 +1,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <TFT_eSPI.h>
+#include <HTTPClient.h>
 #include "font/FLIPclockblack80pt7b.h"
+#include "counterWeb.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
@@ -8,7 +10,7 @@
 #define PIN 12
 #define NUMPIXELS 2
 
-    TFT_eSPI tft = TFT_eSPI();
+TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 
@@ -20,12 +22,14 @@ void setup()
     pixels.begin();
     pixels.clear();
 
-    Serial.begin(115200); // This line mandatory for using the display prototyping library, change the baud rate if needed
+    Serial.begin(115200); 
+    initWebServer();
 
     tft.begin();
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
     drawCenteredString("9999", &FLIPclockblack80pt7b);
+    getSubscriberCount();
 }
 
 void loop()
@@ -63,8 +67,46 @@ void drawCenteredString(const String &text, const GFXfont *f)
 
     // Calculate the position to center the text
     int cursorX = (displayWidth - textWidth) / 2;
-    int cursorY = (displayHeight - textHeight) / 2; 
+    int cursorY = (displayHeight - textHeight) / 2;
 
     // Draw the text
     tft.drawString(text, cursorX, cursorY);
+}
+
+void getSubscriberCount()
+{
+    // Declare an object of class HTTPClient
+    HTTPClient http;
+
+    // Specify request destination
+    String url = "https://youtube.googleapis.com/youtube/v3/channels?part=statistics";
+    url += "&id=";
+    url += CHANNEL_ID;
+    url += "&fields=items/statistics/subscriberCount";
+    url += "&key=";
+    url += APIKEY;
+
+    Serial.println(url);
+
+    // Initialize the connection
+    http.begin(url);
+
+    // Send the request
+    int httpResponseCode = http.GET();
+
+    // If the request was successful, httpResponseCode will be a number > 0
+    if (httpResponseCode > 0)
+    {
+        String response = http.getString();
+        Serial.println(httpResponseCode); // Print HTTP return code
+        Serial.println(response);         // Print request response payload
+    }
+    else
+    {
+        Serial.print("Error on sending request: ");
+        Serial.println(httpResponseCode);
+    }
+
+    // Free resources
+    http.end();
 }
