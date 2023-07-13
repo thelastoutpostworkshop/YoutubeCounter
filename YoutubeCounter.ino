@@ -94,7 +94,7 @@ void fetchSubscriberCountIfNeeded()
         int subscriberCount;
         if (getSubscriberCount(subscriberCount))
         {
-            Serial.println("Subscriber count: " + String(subscriberCount));
+            // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
                 currentSubscriberCount = subscriberCount;
@@ -137,9 +137,9 @@ bool getSubscriberCount(int &subscriberCount)
         DynamicJsonDocument doc(1024);
         deserializeJson(doc, response);
         subscriberCount = doc["items"][0]["statistics"]["subscriberCount"].as<int>();
-        Serial.println(httpResponseCode); // Print HTTP return code
-        Serial.println(response);         // Print request response payload
-        Serial.println(subscriberCount);  // Print subscriber count
+        // Serial.println(httpResponseCode); // Print HTTP return code
+        // Serial.println(response);         // Print request response payload
+        // Serial.println(subscriberCount);  // Print subscriber count
         http.end();
         return true;
     }
