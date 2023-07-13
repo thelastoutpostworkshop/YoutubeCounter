@@ -67,7 +67,7 @@ void loop()
 void drawHTTPIndicator(uint32_t color)
 {
     tft.fillRect(0, tft.height()-3, tft.width(), 3, color);
-    tft.fillRect(100, tft.height()-6, tft.width()-100, 3, color);
+    tft.fillRect(50, tft.height()-6, tft.width()-100, 3, color);
 }
 
 void drawCenteredString(const String &text, const GFXfont *f)
