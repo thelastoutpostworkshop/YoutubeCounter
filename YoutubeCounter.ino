@@ -81,8 +81,6 @@ void drawCenteredString(const String &text, const GFXfont *f)
     tft.drawString(text, cursorX, cursorY);
 }
 
-#include <ArduinoJson.h>
-
 bool getSubscriberCount(int &subscriberCount)
 {
     // Declare an object of class HTTPClient
