@@ -15,6 +15,10 @@ TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 
+unsigned long lastFetchTime = 0;
+const unsigned long fetchInterval = 5 * 60 * 1000; // 5 minutes in milliseconds
+int currentSubscriberCount;
+
 void setup()
 {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -30,16 +34,16 @@ void setup()
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
 
-    int count;
-    if (getSubscriberCount(count))
+    if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(count), &FLIPclockblack80pt7b);
+        drawCenteredString(String(currentSubscriberCount), &FLIPclockblack80pt7b);
     }
 }
 
 void loop()
 {
     server.handleClient();
+    fetchSubscriberCountIfNeeded();
 
     // for (int i = 0; i < NUMPIXELS; i++)
     // {
@@ -79,6 +83,30 @@ void drawCenteredString(const String &text, const GFXfont *f)
 
     // Draw the text
     tft.drawString(text, cursorX, cursorY);
+}
+
+void fetchSubscriberCountIfNeeded()
+{
+    unsigned long currentTime = millis();
+    if (currentTime - lastFetchTime >= fetchInterval)
+    {
+        lastFetchTime = currentTime;
+        int subscriberCount;
+        if (getSubscriberCount(subscriberCount))
+        {
+            Serial.println("Subscriber count: " + String(subscriberCount));
+            if (subscriberCount != currentSubscriberCount)
+            {
+                currentSubscriberCount = subscriberCount;
+                tft.fillScreen(TFT_BLACK);
+                drawCenteredString(String(currentSubscriberCount), &FLIPclockblack80pt7b);
+            }
+        }
+        else
+        {
+            Serial.println("Failed to get subscriber count.");
+        }
+    }
 }
 
 bool getSubscriberCount(int &subscriberCount)
@@ -123,4 +151,3 @@ bool getSubscriberCount(int &subscriberCount)
         return false;
     }
 }
-
