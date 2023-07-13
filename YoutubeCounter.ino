@@ -2,7 +2,7 @@
 #include <TFT_eSPI.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include "font/FLIPclockblack80pt7b.h"
+#include "font/Aurebesh_Bold80pt7b.h"
 #include "counterWeb.h"
 
 #ifdef __AVR__
@@ -36,7 +36,7 @@ void setup()
 
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(currentSubscriberCount), &FLIPclockblack80pt7b);
+        drawCenteredString(String(currentSubscriberCount), &Aurebesh_Bold80pt7b);
     }
 }
 
@@ -99,7 +99,7 @@ void fetchSubscriberCountIfNeeded()
             {
                 currentSubscriberCount = subscriberCount;
                 tft.fillScreen(TFT_BLACK);
-                drawCenteredString(String(currentSubscriberCount), &FLIPclockblack80pt7b);
+                drawCenteredString(String(currentSubscriberCount), &Aurebesh_Bold80pt7b);
             }
         }
         else
