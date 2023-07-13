@@ -1,6 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <TFT_eSPI.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h>
 #include "font/FLIPclockblack80pt7b.h"
 #include "counterWeb.h"
 
@@ -22,40 +23,47 @@ void setup()
     pixels.begin();
     pixels.clear();
 
-    Serial.begin(115200); 
+    Serial.begin(115200);
     initWebServer();
 
     tft.begin();
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
-    drawCenteredString("9999", &FLIPclockblack80pt7b);
-    getSubscriberCount();
+
+    int count;
+    if (getSubscriberCount(count))
+    {
+        drawCenteredString(String(count), &FLIPclockblack80pt7b);
+    }
 }
 
 void loop()
 {
+    server.handleClient();
 
-    for (int i = 0; i < NUMPIXELS; i++)
-    {
-        pixels.setPixelColor(i, pixels.Color(255, 0, 0));
-    }
-    pixels.show();
-    delay(DELAYVAL);
-    for (int i = 0; i < NUMPIXELS; i++)
-    {
-        pixels.setPixelColor(i, pixels.Color(0, 0, 255));
-    }
-    pixels.show();
-    delay(DELAYVAL);
-    pixels.clear();
-    pixels.show();
-    delay(DELAYVAL);
+    // for (int i = 0; i < NUMPIXELS; i++)
+    // {
+    //     pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+    // }
+    // pixels.show();
+    // delay(DELAYVAL);
+    // for (int i = 0; i < NUMPIXELS; i++)
+    // {
+    //     pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+    // }
+    // pixels.show();
+    // delay(DELAYVAL);
+    // pixels.clear();
+    // pixels.show();
+    // delay(DELAYVAL);
 }
 
 void drawCenteredString(const String &text, const GFXfont *f)
 {
     // Set the desired font
     tft.setFreeFont(f);
+
+    Serial.println(text);
 
     // Get the width and height of the display
     int displayWidth = tft.width();
@@ -73,7 +81,9 @@ void drawCenteredString(const String &text, const GFXfont *f)
     tft.drawString(text, cursorX, cursorY);
 }
 
-void getSubscriberCount()
+#include <ArduinoJson.h>
+
+bool getSubscriberCount(int &subscriberCount)
 {
     // Declare an object of class HTTPClient
     HTTPClient http;
@@ -98,15 +108,21 @@ void getSubscriberCount()
     if (httpResponseCode > 0)
     {
         String response = http.getString();
+        DynamicJsonDocument doc(1024);
+        deserializeJson(doc, response);
+        subscriberCount = doc["items"][0]["statistics"]["subscriberCount"].as<int>();
         Serial.println(httpResponseCode); // Print HTTP return code
         Serial.println(response);         // Print request response payload
+        Serial.println(subscriberCount);  // Print subscriber count
+        http.end();
+        return true;
     }
     else
     {
         Serial.print("Error on sending request: ");
         Serial.println(httpResponseCode);
+        http.end();
+        return false;
     }
-
-    // Free resources
-    http.end();
 }
+
