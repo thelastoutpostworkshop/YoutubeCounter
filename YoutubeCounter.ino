@@ -62,6 +62,11 @@ void loop()
     // delay(DELAYVAL);
 }
 
+void drawHTTPIndicator(uint32_t color)
+{
+    tft.fillRect(0, 220, tft.width(), 3, color);
+}
+
 void drawCenteredString(const String &text, const GFXfont *f)
 {
     // Set the desired font
@@ -141,6 +146,7 @@ bool getSubscriberCount(int &subscriberCount)
         // Serial.println(response);         // Print request response payload
         // Serial.println(subscriberCount);  // Print subscriber count
         http.end();
+        drawHTTPIndicator(TFT_GREEN);
         return true;
     }
     else
@@ -148,6 +154,7 @@ bool getSubscriberCount(int &subscriberCount)
         Serial.print("Error on sending request: ");
         Serial.println(httpResponseCode);
         http.end();
+        drawHTTPIndicator(TFT_RED);
         return false;
     }
 }
