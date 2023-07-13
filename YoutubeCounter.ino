@@ -15,6 +15,8 @@ TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 
+const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
+
 unsigned long lastFetchTime = 0;
 const unsigned long fetchInterval = 5 * 60 * 1000; // 5 minutes in milliseconds
 int currentSubscriberCount;
@@ -36,7 +38,7 @@ void setup()
 
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(currentSubscriberCount), &Aurebesh_Bold80pt7b);
+        drawCenteredString(String(currentSubscriberCount), aurebeshCounter);
     }
 }
 
@@ -105,7 +107,7 @@ void fetchSubscriberCountIfNeeded()
             {
                 currentSubscriberCount = subscriberCount;
                 tft.fillScreen(TFT_BLACK);
-                drawCenteredString(String(currentSubscriberCount), &Aurebesh_Bold80pt7b);
+                drawCenteredString(String(currentSubscriberCount), aurebeshCounter);
             }
         }
         else
