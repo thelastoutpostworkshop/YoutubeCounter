@@ -74,24 +74,19 @@ void drawHTTPIndicator(uint32_t color)
 
 void drawCenteredString(const String &text, const GFXfont *f,uint32_t color)
 {
-    // Set the desired font
     tft.setFreeFont(f);
 
     Serial.println(text);
 
-    // Get the width and height of the display
     int displayWidth = tft.width();
     int displayHeight = tft.height();
 
-    // Calculate the width of the text string
     int textWidth = tft.textWidth(text);
     int textHeight = 160; // tft.fontHeight();
 
-    // Calculate the position to center the text
     int cursorX = (displayWidth - textWidth) / 2;
     int cursorY = (displayHeight - textHeight) / 2;
 
-    // Draw the text
     tft.setTextColor(color);
     tft.drawString(text, cursorX, cursorY);
 }
@@ -122,10 +117,8 @@ void fetchSubscriberCountIfNeeded()
 
 bool getSubscriberCount(int &subscriberCount)
 {
-    // Declare an object of class HTTPClient
     HTTPClient http;
 
-    // Specify request destination
     String url = "https://youtube.googleapis.com/youtube/v3/channels?part=statistics";
     url += "&id=";
     url += CHANNEL_ID;
@@ -135,10 +128,7 @@ bool getSubscriberCount(int &subscriberCount)
 
     Serial.println(url);
 
-    // Initialize the connection
     http.begin(url);
-
-    // Send the request
     int httpResponseCode = http.GET();
 
     // If the request was successful, httpResponseCode will be a number > 0
