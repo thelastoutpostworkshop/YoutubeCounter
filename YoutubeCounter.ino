@@ -16,6 +16,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 500
 
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
+const uint32_t counterColor = TFT_WHITE;
 
 unsigned long lastFetchTime = 0;
 const unsigned long fetchInterval = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -38,8 +39,9 @@ void setup()
 
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(currentSubscriberCount), aurebeshCounter);
+        drawCenteredString(String(currentSubscriberCount), aurebeshCounter,counterColor);
     }
+
 }
 
 void loop()
@@ -70,7 +72,7 @@ void drawHTTPIndicator(uint32_t color)
     tft.fillRect(50, tft.height()-6, tft.width()-100, 3, color);
 }
 
-void drawCenteredString(const String &text, const GFXfont *f)
+void drawCenteredString(const String &text, const GFXfont *f,uint32_t color)
 {
     // Set the desired font
     tft.setFreeFont(f);
@@ -90,6 +92,7 @@ void drawCenteredString(const String &text, const GFXfont *f)
     int cursorY = (displayHeight - textHeight) / 2;
 
     // Draw the text
+    tft.setTextColor(color);
     tft.drawString(text, cursorX, cursorY);
 }
 
@@ -105,9 +108,9 @@ void fetchSubscriberCountIfNeeded()
             // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
+                drawCenteredString(String(currentSubscriberCount), aurebeshCounter,TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
-                tft.fillScreen(TFT_BLACK);
-                drawCenteredString(String(currentSubscriberCount), aurebeshCounter);
+                drawCenteredString(String(currentSubscriberCount), aurebeshCounter,counterColor);
             }
         }
         else
