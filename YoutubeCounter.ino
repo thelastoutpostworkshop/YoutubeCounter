@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include "font/Aurebesh_Bold80pt7b.h"
 #include "counterWeb.h"
+#include "mp3tf16p.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
@@ -13,6 +14,10 @@
 
 TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+// MP3 Player
+MP3Player mp3(16, 17);
+
 #define DELAYVAL 500
 
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
@@ -33,15 +38,16 @@ void setup()
     Serial.begin(115200);
     initWebServer();
 
+    mp3.initialize();
+
     tft.begin();
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
 
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(currentSubscriberCount), aurebeshCounter,counterColor);
+        drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
-
 }
 
 void loop()
@@ -68,11 +74,11 @@ void loop()
 
 void drawHTTPIndicator(uint32_t color)
 {
-    tft.fillRect(0, tft.height()-3, tft.width(), 3, color);
-    tft.fillRect(50, tft.height()-6, tft.width()-100, 3, color);
+    tft.fillRect(0, tft.height() - 3, tft.width(), 3, color);
+    tft.fillRect(50, tft.height() - 6, tft.width() - 100, 3, color);
 }
 
-void drawCenteredString(const String &text, const GFXfont *f,uint32_t color)
+void drawCenteredString(const String &text, const GFXfont *f, uint32_t color)
 {
     tft.setFreeFont(f);
 
@@ -103,9 +109,9 @@ void fetchSubscriberCountIfNeeded()
             // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
-                drawCenteredString(String(currentSubscriberCount), aurebeshCounter,TFT_BLACK);
+                drawCenteredString(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
-                drawCenteredString(String(currentSubscriberCount), aurebeshCounter,counterColor);
+                drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
             }
         }
         else
