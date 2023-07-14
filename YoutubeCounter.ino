@@ -17,6 +17,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 // MP3 Player
 MP3Player mp3(16, 17);
+#define volume 15
 
 #define DELAYVAL 500
 
@@ -48,7 +49,6 @@ void setup()
     {
         drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
-    mp3.playTrackNumber(4, 20, false);
 }
 
 void loop()
@@ -111,6 +111,7 @@ void fetchSubscriberCountIfNeeded()
             // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
+                mp3.playTrackNumber(4, volume, false);
                 drawCenteredString(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
                 drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
