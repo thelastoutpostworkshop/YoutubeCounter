@@ -55,7 +55,6 @@ void loop()
 {
     server.handleClient();
     fetchSubscriberCountIfNeeded();
-    mp3.serialPrintStatus(MP3_ALL_MESSAGE);
 
     // for (int i = 0; i < NUMPIXELS; i++)
     // {
