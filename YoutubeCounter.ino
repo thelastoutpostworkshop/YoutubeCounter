@@ -48,12 +48,14 @@ void setup()
     {
         drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
+    mp3.playTrackNumber(4, 20, false);
 }
 
 void loop()
 {
     server.handleClient();
     fetchSubscriberCountIfNeeded();
+    mp3.serialPrintStatus(MP3_ALL_MESSAGE);
 
     // for (int i = 0; i < NUMPIXELS; i++)
     // {
