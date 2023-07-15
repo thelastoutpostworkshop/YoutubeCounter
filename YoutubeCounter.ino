@@ -11,7 +11,7 @@
 #include <avr/power.h>
 #endif
 #define PIN 12
-#define NUMPIXELS 2
+#define NUMPIXELS 8
 
 TFT_eSPI tft = TFT_eSPI();
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
