@@ -23,7 +23,7 @@ MP3Player mp3(16, 17);
 
 // Rotary Encoder
 #define Rotary_Clock 26
-#define Rotary_Data 17
+#define Rotary_Data 27
 #define Rotary_PushButton 14
 #define PushButton_Debounce 250
 #define Rotary_Debounce 250
@@ -70,11 +70,9 @@ void loop()
 
     if (readRotaryPushButton())
     {
-
     }
     if (readRotaryEncoder())
     {
-
     }
 
     // for (int i = 0; i < NUMPIXELS; i++)
@@ -128,10 +126,10 @@ boolean readRotaryEncoder(void)
     // React to only 1 state change to avoid double count
     if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
     {
-
         // If the Rotary_Data state is different than the Rotary_Clock state then
         // the encoder is rotating "CCW" so we decrement
-        if (digitalRead(Rotary_Data) != clockValue)
+        int data = digitalRead(Rotary_Data);
+        if (data != clockValue)
         {
             Serial.println("Clockwise");
         }
