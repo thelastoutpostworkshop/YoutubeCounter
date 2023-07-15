@@ -57,6 +57,9 @@ void setup()
     tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
 
+    pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+    pixels.show();
+
     if (getSubscriberCount(currentSubscriberCount))
     {
         drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
