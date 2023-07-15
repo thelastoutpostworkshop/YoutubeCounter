@@ -55,7 +55,8 @@ void setup()
     tft.begin();
     tft.setRotation(3);
     clearScreen();
-    drawCenteredScreenText("Connecting Wifi",aurebeshText,TFT_BLUE);
+    drawCenteredHorizontalText("Connect", 80,aurebeshText, TFT_YELLOW);
+    drawCenteredHorizontalText("Wifi", 160,aurebeshText, TFT_YELLOW);
     initWebServer();
 
     mp3.initialize();
@@ -180,6 +181,21 @@ void drawCenteredScreenText(const String &text, const GFXfont *f, uint32_t color
 
     tft.setTextColor(color);
     tft.drawString(text, cursorX, cursorY);
+}
+void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, uint32_t color)
+{
+    tft.setFreeFont(f);
+
+    Serial.println(text);
+
+    int displayWidth = tft.width();
+
+    int textWidth = tft.textWidth(text);
+
+    int cursorX = (displayWidth - textWidth) / 2;
+
+    tft.setTextColor(color);
+    tft.drawString(text, cursorX, line);
 }
 
 void fetchSubscriberCountIfNeeded()
