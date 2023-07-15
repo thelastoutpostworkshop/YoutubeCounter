@@ -68,6 +68,15 @@ void loop()
     server.handleClient();
     fetchSubscriberCountIfNeeded();
 
+    if (readRotaryPushButton())
+    {
+
+    }
+    if (readRotaryEncoder())
+    {
+
+    }
+
     // for (int i = 0; i < NUMPIXELS; i++)
     // {
     //     pixels.setPixelColor(i, pixels.Color(255, 0, 0));
@@ -95,48 +104,47 @@ void initRotaryEncoder(void)
 
 boolean readRotaryPushButton(void)
 {
-  int buttonValue = digitalRead(Rotary_PushButton);
-  if (buttonValue == LOW)
-  {
-    if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
+    int buttonValue = digitalRead(Rotary_PushButton);
+    if (buttonValue == LOW)
     {
-      Serial.println("Button pressed!");
-      // Remember last button press event
-      rotary_lastTimeButtonPress = millis();
-      return true;
+        if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
+        {
+            Serial.println("Button pressed!");
+            // Remember last button press event
+            rotary_lastTimeButtonPress = millis();
+            return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 boolean readRotaryEncoder(void)
 {
-  boolean rotaryRead = false;
-  // Read the current state of CLK
-  int clockValue = digitalRead(Rotary_Clock);
+    boolean rotaryRead = false;
+    // Read the current state of CLK
+    int clockValue = digitalRead(Rotary_Clock);
 
-  // If last and current state of Rotary_Clock are different, then "pulse occurred"
-  // React to only 1 state change to avoid double count
-  if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
-  {
-
-    // If the Rotary_Data state is different than the Rotary_Clock state then
-    // the encoder is rotating "CCW" so we decrement
-    if (digitalRead(Rotary_Data) != clockValue)
-    {
-      Serial.println("Clockwise");
-
-    }
-    else
+    // If last and current state of Rotary_Clock are different, then "pulse occurred"
+    // React to only 1 state change to avoid double count
+    if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
     {
 
-      Serial.println("Counterclockwise");
+        // If the Rotary_Data state is different than the Rotary_Clock state then
+        // the encoder is rotating "CCW" so we decrement
+        if (digitalRead(Rotary_Data) != clockValue)
+        {
+            Serial.println("Clockwise");
+        }
+        else
+        {
+
+            Serial.println("Counterclockwise");
+        }
+        rotaryRead = true;
+        rotary_lastTurn = millis();
     }
-    rotaryRead = true;
-    rotary_lastTurn = millis();
-  }
-  rotary_lastStateClock = clockValue;
-  return rotaryRead;
+    rotary_lastStateClock = clockValue;
+    return rotaryRead;
 }
 
 void drawHTTPIndicator(uint32_t color)
@@ -200,7 +208,7 @@ bool getSubscriberCount(int &subscriberCount)
     url += "&key=";
     url += APIKEY;
 
-    Serial.println(url);
+    // Serial.println(url);
 
     http.begin(url);
     int httpResponseCode = http.GET();
