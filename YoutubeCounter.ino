@@ -3,6 +3,7 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include "font/Aurebesh_Bold80pt7b.h"
+#include "font/Aurebesh_Bold40pt7b.h"
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 
@@ -33,6 +34,7 @@ unsigned long rotary_lastTimeButtonPress = 0;
 unsigned long rotary_lastTurn = 0;
 
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
+const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
 unsigned long lastFetchTime = 0;
@@ -49,17 +51,19 @@ void setup()
     pixels.clear();
 
     Serial.begin(115200);
+
+    tft.begin();
+    tft.setRotation(3);
+    clearScreen();
+    drawCenteredString("Connecting Wifi",aurebeshText,TFT_BLUE);
     initWebServer();
 
     mp3.initialize();
 
-    tft.begin();
-    tft.setRotation(3);
-    tft.fillScreen(TFT_BLACK);
-
     pixels.setPixelColor(0, pixels.Color(255, 0, 0));
     pixels.show();
 
+    clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
     {
         drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
@@ -93,6 +97,11 @@ void loop()
     // pixels.clear();
     // pixels.show();
     // delay(DELAYVAL);
+}
+
+void clearScreen(void)
+{
+    tft.fillScreen(TFT_BLACK);
 }
 
 void initRotaryEncoder(void)
