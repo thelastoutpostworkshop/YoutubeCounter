@@ -55,7 +55,7 @@ void setup()
     tft.begin();
     tft.setRotation(3);
     clearScreen();
-    drawCenteredString("Connecting Wifi",aurebeshText,TFT_BLUE);
+    drawCenteredScreenText("Connecting Wifi",aurebeshText,TFT_BLUE);
     initWebServer();
 
     mp3.initialize();
@@ -66,7 +66,7 @@ void setup()
     clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
+        drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
 }
 
@@ -163,7 +163,7 @@ void drawHTTPIndicator(uint32_t color)
     tft.fillRect(50, tft.height() - 6, tft.width() - 100, 3, color);
 }
 
-void drawCenteredString(const String &text, const GFXfont *f, uint32_t color)
+void drawCenteredScreenText(const String &text, const GFXfont *f, uint32_t color)
 {
     tft.setFreeFont(f);
 
@@ -195,9 +195,9 @@ void fetchSubscriberCountIfNeeded()
             if (subscriberCount != currentSubscriberCount)
             {
                 mp3.playTrackNumber(4, volume, false);
-                drawCenteredString(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
+                drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
-                drawCenteredString(String(currentSubscriberCount), aurebeshCounter, counterColor);
+                drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
             }
         }
         else
