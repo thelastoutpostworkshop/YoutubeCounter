@@ -21,6 +21,17 @@ MP3Player mp3(16, 17);
 
 #define DELAYVAL 500
 
+// Rotary Encoder
+#define Rotary_Clock 26
+#define Rotary_Data 17
+#define Rotary_PushButton 14
+#define PushButton_Debounce 250
+#define Rotary_Debounce 250
+
+int rotary_lastStateClock; // Store the PREVIOUS status of the clock pin (HIGH or LOW)
+unsigned long rotary_lastTimeButtonPress = 0;
+unsigned long rotary_lastTurn = 0;
+
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
@@ -33,6 +44,7 @@ void setup()
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
 #endif
+    initRotaryEncoder();
     pixels.begin();
     pixels.clear();
 
@@ -71,6 +83,60 @@ void loop()
     // pixels.clear();
     // pixels.show();
     // delay(DELAYVAL);
+}
+
+void initRotaryEncoder(void)
+{
+    pinMode(Rotary_Clock, INPUT_PULLUP);
+    pinMode(Rotary_Data, INPUT_PULLUP);
+    pinMode(Rotary_PushButton, INPUT_PULLUP);
+    rotary_lastStateClock = digitalRead(Rotary_Clock);
+}
+
+boolean readRotaryPushButton(void)
+{
+  int buttonValue = digitalRead(Rotary_PushButton);
+  if (buttonValue == LOW)
+  {
+    if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
+    {
+      Serial.println("Button pressed!");
+      // Remember last button press event
+      rotary_lastTimeButtonPress = millis();
+      return true;
+    }
+  }
+  return false;
+}
+
+boolean readRotaryEncoder(void)
+{
+  boolean rotaryRead = false;
+  // Read the current state of CLK
+  int clockValue = digitalRead(Rotary_Clock);
+
+  // If last and current state of Rotary_Clock are different, then "pulse occurred"
+  // React to only 1 state change to avoid double count
+  if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
+  {
+
+    // If the Rotary_Data state is different than the Rotary_Clock state then
+    // the encoder is rotating "CCW" so we decrement
+    if (digitalRead(Rotary_Data) != clockValue)
+    {
+      Serial.println("Clockwise");
+
+    }
+    else
+    {
+
+      Serial.println("Counterclockwise");
+    }
+    rotaryRead = true;
+    rotary_lastTurn = millis();
+  }
+  rotary_lastStateClock = clockValue;
+  return rotaryRead;
 }
 
 void drawHTTPIndicator(uint32_t color)
