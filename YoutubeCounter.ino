@@ -67,13 +67,12 @@ void setup()
     initDisplay();
     initRotaryEncoder();
 
+    mp3.initialize();
     mp3.playTrackNumber(soundStartup, currentVolume, false);
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
     initWebServer();
-
-    mp3.initialize();
 
     clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
