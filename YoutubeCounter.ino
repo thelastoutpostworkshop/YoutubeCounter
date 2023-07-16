@@ -14,6 +14,8 @@
 // Neopixels
 #define PIXELSPIN 12
 #define PIXELSCOUNT 8
+uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
+const int roundPixelsCount = 6;
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
 // Display
@@ -80,6 +82,12 @@ void setup()
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
+    for (int i = 0; i < roundPixelsCount; i++)
+    {
+        pixels.setPixelColor(roundPixels[i], pixels.Color(0, 255, 0));
+    }
+
+    pixels.show();
 }
 
 void loop()
@@ -89,8 +97,8 @@ void loop()
 
     if (readRotaryPushButton())
     {
-        mp3.playTrackNumber(test,currentVolume,false);
-        test+=1;
+        mp3.playTrackNumber(test, currentVolume, false);
+        test += 1;
     }
 
     Rotary_Status rotary = readRotaryEncoder();
@@ -239,15 +247,19 @@ void fetchSubscriberCountIfNeeded()
         {
             if (subscriberCount != currentSubscriberCount)
             {
-                if(subscriberCount > currentSubscriberCount) {
-                    if (subscriberCount-currentSubscriberCount > 1)
+                if (subscriberCount > currentSubscriberCount)
+                {
+                    if (subscriberCount - currentSubscriberCount > 1)
                     {
                         sound = soundTwoPlusSubscriber;
-                    } else {
+                    }
+                    else
+                    {
                         sound = random(soundGainingSubscriberCount);
                     }
-                    
-                } else {
+                }
+                else
+                {
                     sound = soundLoosingSubscriber;
                 }
                 mp3.playTrackNumber(sound, currentVolume, false);
