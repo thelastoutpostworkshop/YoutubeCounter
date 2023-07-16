@@ -25,16 +25,16 @@ TFT_eSPI tft = TFT_eSPI();
 MP3Player mp3(RXPIN, TXPIN);
 int currentVolume = 20;
 int soundStartup = 12;
-int soundGainingSubsriber = 4;
-int soundLosingSubscriber[] = {2, 3, 6, 11};
+int soundGainingSubscriber = 6;
+int soundLoosingSubscriber[] = {2,3,4, 6, 11};
 int soundTwoPlusSubscriber = 9;
 
 // Rotary Encoder
 #define Rotary_Clock 26
 #define Rotary_Data 27
 #define Rotary_PushButton 14
-#define PushButton_Debounce 250
-#define Rotary_Debounce 250
+#define PushButton_Debounce 200
+#define Rotary_Debounce 75
 enum Rotary_Status
 {
     NO_STATUS,
@@ -67,7 +67,7 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
-    mp3.playTrackNumber(soundStartup, currentVolume, false);
+    mp3.playTrackNumber(soundGainingSubscriber, currentVolume, false);
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
