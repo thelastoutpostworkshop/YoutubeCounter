@@ -20,7 +20,9 @@ Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 TFT_eSPI tft = TFT_eSPI();
 
 // MP3 Player
-MP3Player mp3(16, 17);
+#define RXPIN 16
+#define TXPIN 16
+MP3Player mp3(RXPIN, TXPIN);
 int currentVolume = 15;
 int soundStartup = 12;
 int soundGainingSubsriber = 4;
