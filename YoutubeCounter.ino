@@ -81,11 +81,8 @@ void loop()
 
     if (readRotaryPushButton())
     {
-        for (int i = 0; i < PIXELSCOUNT; i++)
-        {
-            pixels.setPixelColor(i, pixels.Color(255, 0, 0));
-        }
-        pixels.show();
+       pixels.clear();
+       pixels.show();
     }
 
     Rotary_Status rotary = readRotaryEncoder();
