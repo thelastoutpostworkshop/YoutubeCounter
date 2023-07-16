@@ -39,8 +39,9 @@ const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
-unsigned long lastFetchTime = 0;
-const unsigned long fetchInterval = 5 * 60 * 1000; // 5 minutes in milliseconds
+// Subscribers Fetch
+unsigned long lastFetchSubscriberCount = 0;
+const unsigned long fetchSubscriberCountInterval = 300000L; // 5 minutes in milliseconds
 int currentSubscriberCount;
 
 void setup()
@@ -203,9 +204,9 @@ void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, 
 void fetchSubscriberCountIfNeeded()
 {
     unsigned long currentTime = millis();
-    if (currentTime - lastFetchTime >= fetchInterval)
+    if (currentTime - lastFetchSubscriberCount >= fetchSubscriberCountInterval)
     {
-        lastFetchTime = currentTime;
+        lastFetchSubscriberCount = currentTime;
         int subscriberCount;
         if (getSubscriberCount(subscriberCount))
         {
