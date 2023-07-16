@@ -105,7 +105,8 @@ void loop()
             {
                 pixels.setPixelColor(i, pixels.Color(0, 0, 255));
             }
-            pixels.show();            break;
+            pixels.show();
+            break;
         }
     }
 
