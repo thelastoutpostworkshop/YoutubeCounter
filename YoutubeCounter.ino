@@ -49,15 +49,12 @@ void setup()
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
 #endif
-    initRotaryEncoder();
-    pixels.begin();
-    pixels.clear();
-
     Serial.begin(115200);
 
-    tft.begin();
-    tft.setRotation(3);
-    clearScreen();
+    initPixels();
+    initDisplay();
+    initRotaryEncoder();
+
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
     initWebServer();
@@ -98,6 +95,20 @@ void loop()
     // pixels.clear();
     // pixels.show();
     // delay(DELAYVAL);
+}
+
+void initDisplay(void)
+{
+    tft.begin();
+    tft.setRotation(3);
+    clearScreen();
+}
+
+void initPixels(void)
+{
+    pixels.begin();
+    pixels.clear();
+    pixels.show();
 }
 
 void clearScreen(void)
