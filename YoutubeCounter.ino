@@ -236,7 +236,6 @@ void fetchSubscriberCountIfNeeded()
         int subscriberCount;
         if (getSubscriberCount(subscriberCount))
         {
-            // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
                 mp3.playTrackNumber(4, currentVolume, false);
