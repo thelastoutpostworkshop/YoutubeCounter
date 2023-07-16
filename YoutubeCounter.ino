@@ -58,14 +58,11 @@ void setup()
     tft.begin();
     tft.setRotation(3);
     clearScreen();
-    drawCenteredHorizontalText("Connect", 80,aurebeshText, TFT_YELLOW);
-    drawCenteredHorizontalText("Wifi", 160,aurebeshText, TFT_YELLOW);
+    drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
+    drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
     initWebServer();
 
     mp3.initialize();
-
-    pixels.setPixelColor(0, pixels.Color(255, 0, 0));
-    pixels.show();
 
     clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
@@ -81,16 +78,16 @@ void loop()
 
     if (readRotaryPushButton())
     {
+        for (int i = 0; i < PIXELSCOUNT; i++)
+        {
+            pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+        }
+        pixels.show();
     }
     if (readRotaryEncoder())
     {
     }
 
-    // for (int i = 0; i < PIXELSCOUNT; i++)
-    // {
-    //     pixels.setPixelColor(i, pixels.Color(255, 0, 0));
-    // }
-    // pixels.show();
     // delay(DELAYVAL);
     // for (int i = 0; i < PIXELSCOUNT; i++)
     // {
