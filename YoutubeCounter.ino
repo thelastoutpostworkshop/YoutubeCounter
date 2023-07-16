@@ -21,7 +21,11 @@ TFT_eSPI tft = TFT_eSPI();
 
 // MP3 Player
 MP3Player mp3(16, 17);
-#define volume 15
+int currentVolume = 15;
+int soundStartup = 12;
+int soundGainingSubsriber = 4;
+int soundLosingSubscriber[] = {2, 3, 6, 11};
+int soundTwoPlusSubscriber = 9;
 
 // Rotary Encoder
 #define Rotary_Clock 26
@@ -66,6 +70,7 @@ void setup()
     initWebServer();
 
     mp3.initialize();
+    mp3.playTrackNumber(soundStartup, currentVolume, false);
 
     clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
@@ -81,8 +86,8 @@ void loop()
 
     if (readRotaryPushButton())
     {
-       pixels.clear();
-       pixels.show();
+        pixels.clear();
+        pixels.show();
     }
 
     Rotary_Status rotary = readRotaryEncoder();
@@ -242,7 +247,7 @@ void fetchSubscriberCountIfNeeded()
             // Serial.println("Subscriber count: " + String(subscriberCount));
             if (subscriberCount != currentSubscriberCount)
             {
-                mp3.playTrackNumber(4, volume, false);
+                mp3.playTrackNumber(4, currentVolume, false);
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
