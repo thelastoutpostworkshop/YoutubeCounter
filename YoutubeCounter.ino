@@ -114,17 +114,6 @@ void loop()
             break;
         }
     }
-
-    // delay(DELAYVAL);
-    // for (int i = 0; i < PIXELSCOUNT; i++)
-    // {
-    //     pixels.setPixelColor(i, pixels.Color(0, 0, 255));
-    // }
-    // pixels.show();
-    // delay(DELAYVAL);
-    // pixels.clear();
-    // pixels.show();
-    // delay(DELAYVAL);
 }
 
 void initDisplay(void)
