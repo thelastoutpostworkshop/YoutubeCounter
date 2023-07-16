@@ -10,17 +10,18 @@
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
-#define PIN 12
-#define NUMPIXELS 8
 
+// Neopixels
+#define PIXELSPIN 12
+#define PIXELSCOUNT 8
+Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
+
+// Display
 TFT_eSPI tft = TFT_eSPI();
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 // MP3 Player
 MP3Player mp3(16, 17);
 #define volume 15
-
-#define DELAYVAL 500
 
 // Rotary Encoder
 #define Rotary_Clock 26
@@ -33,6 +34,7 @@ int rotary_lastStateClock; // Store the PREVIOUS status of the clock pin (HIGH o
 unsigned long rotary_lastTimeButtonPress = 0;
 unsigned long rotary_lastTurn = 0;
 
+// Fonts
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
 const uint32_t counterColor = TFT_WHITE;
@@ -83,13 +85,13 @@ void loop()
     {
     }
 
-    // for (int i = 0; i < NUMPIXELS; i++)
+    // for (int i = 0; i < PIXELSCOUNT; i++)
     // {
     //     pixels.setPixelColor(i, pixels.Color(255, 0, 0));
     // }
     // pixels.show();
     // delay(DELAYVAL);
-    // for (int i = 0; i < NUMPIXELS; i++)
+    // for (int i = 0; i < PIXELSCOUNT; i++)
     // {
     //     pixels.setPixelColor(i, pixels.Color(0, 0, 255));
     // }
