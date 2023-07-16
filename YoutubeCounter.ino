@@ -229,6 +229,7 @@ void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, 
 
 void fetchSubscriberCountIfNeeded()
 {
+    int sound;
     unsigned long currentTime = millis();
     if (currentTime - lastFetchSubscriberCount >= fetchSubscriberCountInterval)
     {
@@ -238,7 +239,18 @@ void fetchSubscriberCountIfNeeded()
         {
             if (subscriberCount != currentSubscriberCount)
             {
-                mp3.playTrackNumber(4, currentVolume, false);
+                if(subscriberCount > currentSubscriberCount) {
+                    if (subscriberCount-currentSubscriberCount > 1)
+                    {
+                        sound = soundTwoPlusSubscriber;
+                    } else {
+                        sound = random(soundGainingSubscriberCount);
+                    }
+                    
+                } else {
+                    sound = soundLoosingSubscriber;
+                }
+                mp3.playTrackNumber(sound, currentVolume, false);
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
