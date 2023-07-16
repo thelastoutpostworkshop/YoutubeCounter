@@ -23,7 +23,7 @@ TFT_eSPI tft = TFT_eSPI();
 #define RXPIN 16
 #define TXPIN 16
 MP3Player mp3(RXPIN, TXPIN);
-int currentVolume = 15;
+int currentVolume = 20;
 int soundStartup = 12;
 int soundGainingSubsriber = 4;
 int soundLosingSubscriber[] = {2, 3, 6, 11};
@@ -67,12 +67,13 @@ void setup()
     initDisplay();
     initRotaryEncoder();
 
+    mp3.playTrackNumber(soundStartup, currentVolume, false);
+
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
     initWebServer();
 
     mp3.initialize();
-    mp3.playTrackNumber(soundStartup, currentVolume, false);
 
     clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
