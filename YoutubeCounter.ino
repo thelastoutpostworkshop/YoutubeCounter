@@ -29,6 +29,12 @@ MP3Player mp3(16, 17);
 #define Rotary_PushButton 14
 #define PushButton_Debounce 250
 #define Rotary_Debounce 250
+enum Rotary_Status
+{
+    NO_STATUS,
+    CLOCKWISE,
+    COUNTERCLOCKWISE
+};
 
 int rotary_lastStateClock; // Store the PREVIOUS status of the clock pin (HIGH or LOW)
 unsigned long rotary_lastTimeButtonPress = 0;
@@ -81,8 +87,26 @@ void loop()
         }
         pixels.show();
     }
-    if (readRotaryEncoder())
+
+    Rotary_Status rotary = readRotaryEncoder();
+    if (rotary != NO_STATUS)
     {
+        switch (rotary)
+        {
+        case CLOCKWISE:
+            for (int i = 0; i < PIXELSCOUNT; i++)
+            {
+                pixels.setPixelColor(i, pixels.Color(0, 255, 0));
+            }
+            pixels.show();
+            break;
+        case COUNTERCLOCKWISE:
+            for (int i = 0; i < PIXELSCOUNT; i++)
+            {
+                pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+            }
+            pixels.show();            break;
+        }
     }
 
     // delay(DELAYVAL);
@@ -140,9 +164,9 @@ boolean readRotaryPushButton(void)
     return false;
 }
 
-boolean readRotaryEncoder(void)
+Rotary_Status readRotaryEncoder(void)
 {
-    boolean rotaryRead = false;
+    Rotary_Status rotaryRead = NO_STATUS;
     // Read the current state of CLK
     int clockValue = digitalRead(Rotary_Clock);
 
@@ -155,14 +179,13 @@ boolean readRotaryEncoder(void)
         int data = digitalRead(Rotary_Data);
         if (data != clockValue)
         {
-            Serial.println("Clockwise");
+            rotaryRead = CLOCKWISE;
         }
         else
         {
 
-            Serial.println("Counterclockwise");
+            rotaryRead = COUNTERCLOCKWISE;
         }
-        rotaryRead = true;
         rotary_lastTurn = millis();
     }
     rotary_lastStateClock = clockValue;
