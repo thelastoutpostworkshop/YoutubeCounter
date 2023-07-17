@@ -92,14 +92,11 @@ void setup()
     initWebServer();
 
     clearScreen();
-    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 255, 0));
-    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 255, 0));
+
     if (getSubscriberCount(currentSubscriberCount))
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
-    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
-    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
 }
@@ -350,7 +347,9 @@ bool getSubscriberCount(int &subscriberCount)
     url += "&key=";
     url += APIKEY;
 
-    // Serial.println(url);
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(255, 255, 0));
+    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 255, 0));
+    pixels.show();
 
     http.begin(url);
     int httpResponseCode = http.GET();
@@ -367,6 +366,9 @@ bool getSubscriberCount(int &subscriberCount)
         // Serial.println(subscriberCount);  // Print subscriber count
         http.end();
         drawHTTPIndicator(TFT_GREEN);
+        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
+        pixels.show();
         return true;
     }
     else
@@ -375,6 +377,9 @@ bool getSubscriberCount(int &subscriberCount)
         Serial.println(httpResponseCode);
         http.end();
         drawHTTPIndicator(TFT_RED);
+        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
+        pixels.show();
         return false;
     }
 }
