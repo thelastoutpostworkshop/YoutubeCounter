@@ -61,7 +61,8 @@ const uint32_t counterColor = TFT_WHITE;
 
 // Subscribers Fetch
 unsigned long lastFetchSubscriberCount = 0;
-const unsigned long fetchSubscriberCountInterval = 300000L; // 5 minutes in milliseconds
+// const unsigned long fetchSubscriberCountInterval = 300000L; // 5 minutes in milliseconds
+const unsigned long fetchSubscriberCountInterval = 5000; // 5 minutes in milliseconds
 int currentSubscriberCount;
 enum Subscriber_Status
 {
@@ -85,7 +86,8 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
-    mp3.playTrackNumber(soundStartup, currentVolume, false);
+    // mp3.playTrackNumber(soundStartup, currentVolume, false);
+    playDarthVadedBreathing();
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
@@ -188,6 +190,42 @@ void initRotaryEncoder(void)
     pinMode(Rotary_Data, INPUT_PULLUP);
     pinMode(Rotary_PushButton, INPUT_PULLUP);
     rotary_lastStateClock = digitalRead(Rotary_Clock);
+}
+
+void playDarthVadedBreathing(void)
+{
+    uint32_t pause;
+    mp3.playTrackNumber(soundStartup, currentVolume, false);
+    delay(500);
+    for (int i = 0; i < 2; i++)
+    {
+        //Inspiration
+        pause = 1096 / 255;
+        for (int i = 0; i <= 255; i++)
+        {
+            pixels.setBrightness(i);
+            setColorAllRoundPixels(pixels.Color(255, 0, 0));
+            pixels.show();
+            delay(pause);
+        }
+        //Expiration
+        pause = 1490 / 255;
+        for (int i = 255; i >= 0; i--)
+        {
+            pixels.setBrightness(i);
+            setColorAllRoundPixels(pixels.Color(255, 0, 0));
+            pixels.show();
+            delay(pause);
+        }
+    }
+}
+
+void setColorAllRoundPixels(uint32_t color)
+{
+    for (int i = 0; i < roundPixelsCount; i++)
+    {
+        pixels.setPixelColor(roundPixels[i], color);
+    }
 }
 
 boolean readRotaryPushButton(void)
