@@ -72,6 +72,7 @@ void setup()
     clock_prescale_set(clock_div_1);
 #endif
     Serial.begin(115200);
+    randomSeed(analogRead(0));
 
     initPixels();
     initDisplay();
