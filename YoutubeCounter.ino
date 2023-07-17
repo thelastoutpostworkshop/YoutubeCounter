@@ -92,10 +92,15 @@ void setup()
     initWebServer();
 
     clearScreen();
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 255, 0));
+    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 255, 0));
     if (getSubscriberCount(currentSubscriberCount))
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
+
     scheduler.addTask(showRandomRoundPixels, 10000L);
 }
 
