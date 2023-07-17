@@ -163,7 +163,7 @@ void showRandomRoundPixels(void)
             // Get a random index within the roundPixels array
             int index = random(roundPixelsCount);
             // Set the color of the pixel at the random index
-            pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 64));
+            pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 32));
         }
 
         // Show the newly colored pixels
