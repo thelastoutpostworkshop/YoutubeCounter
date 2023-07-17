@@ -16,10 +16,11 @@
 #define PIXELSCOUNT 8
 uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
 const int roundPixelsCount = 6;
-uint16_t squarePixels[] = {0,7};
-const int roundPixelsCount = 2;
+uint16_t squarePixels[] = {0, 7};
+const int squarePixelsCount = 2;
 const int looseSubscriberPixel = 7;
 const int gainSubscriberPixel = 0;
+const int delayRandomPixels = 10000L;
 
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
@@ -121,6 +122,7 @@ void loop()
             break;
         }
     }
+    showRandomRoundPixels();
 }
 
 void initDisplay(void)
@@ -135,6 +137,31 @@ void initPixels(void)
     pixels.begin();
     pixels.clear();
     pixels.show();
+}
+
+void showRandomRoundPixels(void)
+{
+    static unsigned long lastUpdateTime = 0; // static variable to keep its value between calls
+    if (millis() - lastUpdateTime >= 10000)
+    { // 10000 milliseconds = 10 seconds
+        uint32_t randomColor = pixels.Color(random(256), random(256), random(256));
+
+        for (int i = 0; i < roundPixelsCount; i++)
+        {
+            pixels.setPixelColor(roundPixels[i], pixels.Color(0, 0, 0));
+        }
+        pixels.show();
+
+        // Create a for loop that runs 3 times or less if the roundPixelsCount is less than 3
+        int colorPixelCount = min(3, roundPixelsCount);
+        for (int i = 0; i < colorPixelCount; i++)
+        {
+            pixels.setPixelColor(roundPixels[i], randomColor);
+        }
+        pixels.show();
+
+        lastUpdateTime = millis(); // update the last update time
+    }
 }
 
 void clearScreen(void)
