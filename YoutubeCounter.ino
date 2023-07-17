@@ -18,7 +18,6 @@ uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
 const int roundPixelsCount = 6;
 const int looseSubscriberPixel = 7;
 const int gainSubscriberPixel = 0;
-const int randomPixelsInterval = 10000L;
 
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
@@ -71,6 +70,59 @@ enum Subscriber_Status
 };
 Subscriber_Status currentSubscriberStatus = UNKNNOWN;
 
+// Task scheduler
+class Task {
+public:
+  typedef void (*taskCallback)(void);
+
+  // Default constructor
+  Task() : callback(nullptr), interval(0), lastRun(0) {}
+
+  Task(taskCallback cb, unsigned long intervalMillis) : callback(cb), interval(intervalMillis) {
+    lastRun = 0;
+  }
+
+  void runIfDue() {
+    unsigned long now = millis();
+    if (now - lastRun >= interval) {
+      lastRun = now;
+      callback();
+    }
+  }
+
+private:
+  taskCallback callback;
+  unsigned long interval;
+  unsigned long lastRun;
+};
+
+class TaskScheduler {
+public:
+  TaskScheduler() {
+    taskCount = 0;  // Initialize taskCount
+  }
+
+  void addTask(Task::taskCallback cb, unsigned long intervalMillis) {
+    if (taskCount < MAX_TASKS) {
+      tasks[taskCount++] = Task(cb, intervalMillis);
+    }
+  }
+
+  void runTasks() {
+    for (int i = 0; i < taskCount; ++i) {
+      tasks[i].runIfDue();
+    }
+  }
+
+private:
+  static const int MAX_TASKS = 10; // Max number of tasks that can be scheduled.
+  Task tasks[MAX_TASKS];
+  int taskCount;
+};
+
+
+TaskScheduler scheduler;
+
 void setup()
 {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -94,11 +146,13 @@ void setup()
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
+    scheduler.addTask(showRandomRoundPixels, 10000L);
 }
 
 void loop()
 {
     server.handleClient();
+    scheduler.runTasks();
     fetchSubscriberCountIfNeeded();
 
     if (readRotaryPushButton())
@@ -128,7 +182,6 @@ void loop()
             break;
         }
     }
-    showRandomRoundPixels();
 }
 
 void initDisplay(void)
@@ -147,34 +200,29 @@ void initPixels(void)
 
 void showRandomRoundPixels(void)
 {
-    static unsigned long lastUpdateTime = 0; // static variable to keep its value between calls
-    if (millis() - lastUpdateTime >= randomPixelsInterval)
+    // Determine the number of pixels to change (up to 3)
+    int numPixelsToChange = min(3, roundPixelsCount);
+
+    // Clear all pixels in roundPixels
+    for (int i = 0; i < roundPixelsCount; i++)
     {
-        // Determine the number of pixels to change (up to 3)
-        int numPixelsToChange = min(3, roundPixelsCount);
-
-        // Clear all pixels in roundPixels
-        for (int i = 0; i < roundPixelsCount; i++)
-        {
-            pixels.setPixelColor(roundPixels[i], pixels.Color(0, 0, 0));
-        }
-
-        // Show the cleared pixels
-        pixels.show();
-
-        // Change color of up to 3 random pixels
-        for (int i = 0; i < numPixelsToChange; i++)
-        {
-            // Get a random index within the roundPixels array
-            int index = random(roundPixelsCount);
-            // Set the color of the pixel at the random index
-            pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 32));
-        }
-
-        // Show the newly colored pixels
-        pixels.show();
-        lastUpdateTime = millis();
+        pixels.setPixelColor(roundPixels[i], pixels.Color(0, 0, 0));
     }
+
+    // Show the cleared pixels
+    pixels.show();
+
+    // Change color of up to 3 random pixels
+    for (int i = 0; i < numPixelsToChange; i++)
+    {
+        // Get a random index within the roundPixels array
+        int index = random(roundPixelsCount);
+        // Set the color of the pixel at the random index
+        pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 32));
+    }
+
+    // Show the newly colored pixels
+    pixels.show();
 }
 
 void clearScreen(void)
