@@ -87,12 +87,6 @@ void setup()
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
-    for (int i = 0; i < roundPixelsCount; i++)
-    {
-        pixels.setPixelColor(roundPixels[i], pixels.Color(0, 255, 0));
-    }
-
-    pixels.show();
 }
 
 void loop()
