@@ -16,8 +16,6 @@
 #define PIXELSCOUNT 8
 uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
 const int roundPixelsCount = 6;
-uint16_t squarePixels[] = {0, 7};
-const int squarePixelsCount = 2;
 const int looseSubscriberPixel = 7;
 const int gainSubscriberPixel = 0;
 const int randomPixelsInterval = 10000L;
@@ -65,6 +63,13 @@ const uint32_t counterColor = TFT_WHITE;
 unsigned long lastFetchSubscriberCount = 0;
 const unsigned long fetchSubscriberCountInterval = 300000L; // 5 minutes in milliseconds
 int currentSubscriberCount;
+enum Subscriber_Status
+{
+    UNKNNOWN,
+    LOOSING,
+    GAINING,
+};
+Subscriber_Status currentSubscriberStatus = UNKNNOWN;
 
 void setup()
 {
@@ -291,15 +296,18 @@ void fetchSubscriberCountIfNeeded()
                     {
                         sound = random(soundGainingSubscriberCount);
                     }
+                    currentSubscriberStatus = GAINING;
                 }
                 else
                 {
                     sound = soundLoosingSubscriber;
+                    currentSubscriberStatus = LOOSING;
                 }
                 mp3.playTrackNumber(sound, currentVolume, false);
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
                 currentSubscriberCount = subscriberCount;
                 drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+                showCurrentSubscriberStatus();
             }
         }
         else
@@ -307,6 +315,25 @@ void fetchSubscriberCountIfNeeded()
             Serial.println("Failed to get subscriber count.");
         }
     }
+}
+
+void showCurrentSubscriberStatus(void)
+{
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
+
+    switch (currentSubscriberStatus)
+    {
+    case GAINING:
+        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 255, 0));
+        break;
+
+    case LOOSING:
+        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 0, 0));
+        /* code */
+        break;
+    }
+    pixels.show();
 }
 
 bool getSubscriberCount(int &subscriberCount)
