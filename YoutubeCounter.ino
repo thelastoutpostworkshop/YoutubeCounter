@@ -20,7 +20,7 @@ uint16_t squarePixels[] = {0, 7};
 const int squarePixelsCount = 2;
 const int looseSubscriberPixel = 7;
 const int gainSubscriberPixel = 0;
-const int delayRandomPixels = 10000L;
+const int randomPixelsInterval = 10000L;
 
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
@@ -140,33 +140,39 @@ void initPixels(void)
     pixels.show();
 }
 
-void showRandomRoundPixels(void) {
-    // Get a random color
-    uint32_t randomColor = pixels.Color(random(256), random(256), random(256));
+void showRandomRoundPixels(void)
+{
+    static unsigned long lastUpdateTime = 0; // static variable to keep its value between calls
+    if (millis() - lastUpdateTime >= randomPixelsInterval)
+    {
+        // Get a random color
+        uint32_t randomColor = pixels.Color(random(256), random(256), random(256));
 
-    // Determine the number of pixels to change (up to 3)
-    int numPixelsToChange = min(3, roundPixelsCount);
-    
-    // Clear all pixels in roundPixels
-    for (int i = 0; i < roundPixelsCount; i++) {
-        pixels.setPixelColor(roundPixels[i], pixels.Color(0, 0, 0));
+        // Determine the number of pixels to change (up to 3)
+        int numPixelsToChange = min(3, roundPixelsCount);
+
+        // Clear all pixels in roundPixels
+        for (int i = 0; i < roundPixelsCount; i++)
+        {
+            pixels.setPixelColor(roundPixels[i], pixels.Color(0, 0, 0));
+        }
+
+        // Show the cleared pixels
+        pixels.show();
+
+        // Change color of up to 3 random pixels
+        for (int i = 0; i < numPixelsToChange; i++)
+        {
+            // Get a random index within the roundPixels array
+            int index = random(roundPixelsCount);
+            // Set the color of the pixel at the random index
+            pixels.setPixelColor(roundPixels[index], randomColor);
+        }
+
+        // Show the newly colored pixels
+        pixels.show();
     }
-
-    // Show the cleared pixels
-    pixels.show();
-
-    // Change color of up to 3 random pixels
-    for (int i = 0; i < numPixelsToChange; i++) {
-        // Get a random index within the roundPixels array
-        int index = random(roundPixelsCount);
-        // Set the color of the pixel at the random index
-        pixels.setPixelColor(roundPixels[index], randomColor);
-    }
-
-    // Show the newly colored pixels
-    pixels.show();
 }
-
 
 void clearScreen(void)
 {
