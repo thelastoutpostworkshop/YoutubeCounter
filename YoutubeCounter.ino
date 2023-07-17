@@ -89,9 +89,9 @@ void setup()
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
     initWebServer();
 
-    clearScreen();
     if (getSubscriberCount(currentSubscriberCount))
     {
+        clearScreen();
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
 }
