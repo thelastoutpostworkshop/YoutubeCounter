@@ -16,6 +16,11 @@
 #define PIXELSCOUNT 8
 uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
 const int roundPixelsCount = 6;
+uint16_t squarePixels[] = {0,7};
+const int roundPixelsCount = 2;
+const int looseSubscriberPixel = 7;
+const int gainSubscriberPixel = 0;
+
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
 // Display
