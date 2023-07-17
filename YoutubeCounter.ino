@@ -145,9 +145,6 @@ void showRandomRoundPixels(void)
     static unsigned long lastUpdateTime = 0; // static variable to keep its value between calls
     if (millis() - lastUpdateTime >= randomPixelsInterval)
     {
-        // Get a random color
-        uint32_t randomColor = pixels.Color(random(256), random(256), random(256));
-
         // Determine the number of pixels to change (up to 3)
         int numPixelsToChange = min(3, roundPixelsCount);
 
@@ -166,11 +163,12 @@ void showRandomRoundPixels(void)
             // Get a random index within the roundPixels array
             int index = random(roundPixelsCount);
             // Set the color of the pixel at the random index
-            pixels.setPixelColor(roundPixels[index], randomColor);
+            pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 64));
         }
 
         // Show the newly colored pixels
         pixels.show();
+        lastUpdateTime = millis();
     }
 }
 
