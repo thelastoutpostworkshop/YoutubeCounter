@@ -7,6 +7,7 @@
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
+#include "tactical.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
@@ -29,7 +30,7 @@ TFT_eSPI tft = TFT_eSPI();
 #define RXPIN 16
 #define TXPIN 17
 MP3Player mp3(RXPIN, TXPIN);
-int currentVolume = 20;
+int currentVolume = 15;
 int soundStartup = 12;
 int soundGainingSubscriber[] = {2, 3, 4, 6, 11};
 int soundGainingSubscriberCount = 5;
@@ -89,6 +90,19 @@ void setup()
     initWebServer();
 
     clearScreen();
+
+    // // Define a grayscale color map from white to black.
+    // uint16_t cmap[256];
+    // for (int i = 0; i < 256; i++)
+    // {
+    //     uint8_t gray = 255 - i;             // invert the grayscale value
+    //     uint16_t r = gray >> 3;             // shift to 5 bit value
+    //     uint16_t g = gray >> 2;             // shift to 6 bit value
+    //     uint16_t b = gray >> 3;             // shift to 5 bit value
+    //     cmap[i] = (r << 11) | (g << 5) | b; // Color in 565 format
+    // }
+
+    // tft.pushImage(0, 0, 480, 320, image_data_tactical,true,cmap);
 
     if (getSubscriberCount(currentSubscriberCount))
     {
