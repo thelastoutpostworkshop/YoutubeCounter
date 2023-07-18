@@ -96,8 +96,8 @@ void setup()
     }
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
-    scheduler.addTask(fetchSubscriberCountIfNeeded, 5000L);
-    scheduler.addTask(playDarthVadedBreathing, 10000L);
+    scheduler.addTask(fetchSubscriberCountIfNeeded, 300000L);
+    scheduler.addTask(playDarthVadedBreathing, 3600000L);
 }
 
 void loop()
@@ -379,10 +379,6 @@ bool getSubscriberCount(int &subscriberCount)
     url += "&key=";
     url += APIKEY;
 
-    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(255, 255, 0));
-    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 255, 0));
-    pixels.show();
-
     http.begin(url);
     int httpResponseCode = http.GET();
 
@@ -398,9 +394,6 @@ bool getSubscriberCount(int &subscriberCount)
         // Serial.println(subscriberCount);  // Print subscriber count
         http.end();
         drawHTTPIndicator(TFT_GREEN);
-        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
-        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
-        pixels.show();
         return true;
     }
     else
@@ -409,9 +402,6 @@ bool getSubscriberCount(int &subscriberCount)
         Serial.println(httpResponseCode);
         http.end();
         drawHTTPIndicator(TFT_RED);
-        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
-        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
-        pixels.show();
         return false;
     }
 }
