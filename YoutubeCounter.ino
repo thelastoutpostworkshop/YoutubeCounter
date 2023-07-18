@@ -119,7 +119,6 @@ void loop()
 {
     server.handleClient();
     scheduler.runTasks();
-    fetchSubscriberCountIfNeeded();
 
     if (readRotaryPushButton())
     {
