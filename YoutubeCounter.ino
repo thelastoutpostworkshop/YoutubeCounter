@@ -95,9 +95,10 @@ void setup()
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
     }
 
-    scheduler.addTask(showRandomRoundPixels, 10000L);
+    // scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCountIfNeeded, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
+    scheduler.addTask(showRainbow, 10000L);
 }
 
 void loop()
@@ -145,6 +146,18 @@ void initDisplay(void)
 void initPixels(void)
 {
     pixels.begin();
+    pixels.clear();
+    pixels.show();
+}
+
+void showRainbow(void)
+{
+    for (int i = 1; i < 50; i++)
+    {
+        pixels.rainbow(0, i);
+        pixels.show();
+        delay(100);
+    }
     pixels.clear();
     pixels.show();
 }
