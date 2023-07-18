@@ -7,7 +7,7 @@ public:
   Task() : callback(nullptr), interval(0), lastRun(0) {}
 
   Task(taskCallback cb, unsigned long intervalMillis) : callback(cb), interval(intervalMillis) {
-    lastRun = 0;
+    lastRun = millis();
   }
 
   void runIfDue() {

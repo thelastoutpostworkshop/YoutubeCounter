@@ -111,8 +111,8 @@ void setup()
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCountIfNeeded, 300000L);
-    scheduler.addTask(playDarthVadedBreathing, 3600000L);
-    scheduler.addTask(showRainbow, 900000L);
+    // scheduler.addTask(playDarthVadedBreathing, 3600000L);
+    // scheduler.addTask(showRainbow, 900000L);
 }
 
 void loop()
@@ -342,6 +342,8 @@ void fetchSubscriberCountIfNeeded()
     int sound;
 
     int subscriberCount;
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 255));
+    pixels.show();
     if (getSubscriberCount(subscriberCount))
     {
         if (subscriberCount != currentSubscriberCount)
@@ -354,7 +356,7 @@ void fetchSubscriberCountIfNeeded()
                 }
                 else
                 {
-                    sound = random(soundGainingSubscriberCount);
+                    sound = soundGainingSubscriber[(soundGainingSubscriberCount)];
                 }
                 currentSubscriberStatus = GAINING;
             }
@@ -374,6 +376,8 @@ void fetchSubscriberCountIfNeeded()
     {
         Serial.println("Failed to get subscriber count.");
     }
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+    pixels.show();
 }
 
 void showCurrentSubscriberStatus(void)
