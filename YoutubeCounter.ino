@@ -413,14 +413,37 @@ bool getSubscriberCount(int &subscriberCount)
     {
         String response = http.getString();
         DynamicJsonDocument doc(1024);
-        deserializeJson(doc, response);
-        subscriberCount = doc["items"][0]["statistics"]["subscriberCount"].as<int>();
-        // Serial.println(httpResponseCode); // Print HTTP return code
-        // Serial.println(response);         // Print request response payload
-        // Serial.println(subscriberCount);  // Print subscriber count
-        http.end();
-        drawHTTPIndicator(TFT_GREEN);
-        return true;
+        DeserializationError error = deserializeJson(doc, response);
+
+        // Check for errors in deserialization
+        if (error)
+        {
+            Serial.println(F("deserializeJson() failed: "));
+            Serial.println(error.c_str());
+            http.end();
+            drawHTTPIndicator(TFT_RED);
+            return false;
+        }
+
+        JsonObject root = doc.as<JsonObject>();
+        
+        // Check if the JSON response contains the expected keys
+        if (root.containsKey("items") && root["items"].as<JsonArray>().size() > 0 && 
+            root["items"][0].as<JsonObject>().containsKey("statistics") &&
+            root["items"][0]["statistics"].as<JsonObject>().containsKey("subscriberCount"))
+        {
+            subscriberCount = root["items"][0]["statistics"]["subscriberCount"].as<int>();
+            http.end();
+            drawHTTPIndicator(TFT_GREEN);
+            return true;
+        }
+        else
+        {
+            Serial.println("JSON response did not contain expected keys.");
+            http.end();
+            drawHTTPIndicator(TFT_RED);
+            return false;
+        }
     }
     else
     {
@@ -431,3 +454,4 @@ bool getSubscriberCount(int &subscriberCount)
         return false;
     }
 }
+
