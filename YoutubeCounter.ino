@@ -136,15 +136,15 @@ void drawDisplay()
     // Draw small rounded rectangles at the bottom of the screen, between each vertical line
     for (int i = 1; i <= 6; i++)
     {
-        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 40, random(10,20), 20, 10, TFT_DARKGREEN);
+        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 40, random(20,40), 10, 10, TFT_DARKGREEN);
     }
 
     // Draw a large ellipse, where one end is on the right and going off the screen on the left
     tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 2, TFT_DARKGREEN);
 
     // Draw two ellipses of this kind
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 4, TFT_DARKGREEN);
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 8, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width()/2, tft.height() / 4, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width()/3, tft.height() / 8, TFT_DARKGREEN);
 }
 
 void loop()
