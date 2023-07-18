@@ -113,7 +113,7 @@ void setup()
     scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
-    scheduler.addTask(showRainbow, 900000L);
+    scheduler.addTask(showRainbow, 950000L);
 }
 
 void loop()
