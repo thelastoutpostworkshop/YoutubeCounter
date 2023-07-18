@@ -60,7 +60,7 @@ const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
-int currentSubscriberCount;
+int currentSubscriberCount = -1;
 enum Subscriber_Status
 {
     UNKNNOWN,
