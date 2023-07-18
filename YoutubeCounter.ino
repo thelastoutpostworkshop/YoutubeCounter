@@ -105,6 +105,8 @@ void setup()
     // tft.setSwapBytes(true);
     // tft.pushImage(0, 0, 480, 100, image_data_tactical);
 
+    drawDisplay();
+
     if (getSubscriberCount(currentSubscriberCount))
     {
         drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
@@ -114,6 +116,35 @@ void setup()
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showRainbow, 950000L);
+}
+
+void drawDisplay()
+{
+    // Draw 6 vertical lines spaced evenly
+    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
+    for (int i = 1; i <= 6; i++)
+    {
+        tft.drawLine(i * lineSpacing, 0, i * lineSpacing, tft.height(), TFT_DARKGREEN);
+    }
+
+    // Draw 4 concentric circles to the left of the screen
+    for (int i = 1; i <= 4; i++)
+    {
+        tft.drawCircle(50, tft.height() / 2, i * 50, TFT_DARKGREEN); // Radius is i * 75 to get a maximum radius of 300
+    }
+
+    // Draw small rounded rectangles at the bottom of the screen, between each vertical line
+    for (int i = 1; i <= 6; i++)
+    {
+        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 40, random(10,20), 20, 10, TFT_DARKGREEN);
+    }
+
+    // Draw a large ellipse, where one end is on the right and going off the screen on the left
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 2, TFT_DARKGREEN);
+
+    // Draw two ellipses of this kind
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 4, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 8, TFT_DARKGREEN);
 }
 
 void loop()
@@ -427,9 +458,9 @@ bool getSubscriberCount(int &subscriberCount)
         }
 
         JsonObject root = doc.as<JsonObject>();
-        
+
         // Check if the JSON response contains the expected keys
-        if (root.containsKey("items") && root["items"].as<JsonArray>().size() > 0 && 
+        if (root.containsKey("items") && root["items"].as<JsonArray>().size() > 0 &&
             root["items"][0].as<JsonObject>().containsKey("statistics") &&
             root["items"][0]["statistics"].as<JsonObject>().containsKey("subscriberCount"))
         {
@@ -455,4 +486,3 @@ bool getSubscriberCount(int &subscriberCount)
         return false;
     }
 }
-
