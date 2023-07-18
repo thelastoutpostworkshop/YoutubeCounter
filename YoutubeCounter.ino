@@ -59,10 +59,6 @@ const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
-// Subscribers Fetch
-unsigned long lastFetchSubscriberCount = 0;
-// const unsigned long fetchSubscriberCountInterval = 300000L; // 5 minutes in milliseconds
-const unsigned long fetchSubscriberCountInterval = 5000; // 5 minutes in milliseconds
 int currentSubscriberCount;
 enum Subscriber_Status
 {
@@ -86,8 +82,7 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
-    // mp3.playTrackNumber(soundStartup, currentVolume, false);
-    playDarthVadedBreathing();
+    mp3.playTrackNumber(soundStartup, currentVolume, false);
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
@@ -101,6 +96,8 @@ void setup()
     }
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
+    scheduler.addTask(fetchSubscriberCountIfNeeded, 5000L);
+    scheduler.addTask(playDarthVadedBreathing, 10000L);
 }
 
 void loop()
@@ -199,7 +196,7 @@ void playDarthVadedBreathing(void)
     delay(500);
     for (int i = 0; i < 2; i++)
     {
-        //Inspiration
+        // Inspiration
         pause = 1096 / 255;
         for (int i = 0; i <= 255; i++)
         {
@@ -208,8 +205,8 @@ void playDarthVadedBreathing(void)
             pixels.show();
             delay(pause);
         }
-        //Expiration
-        pause = 1490 / 255;
+        // Expiration
+        pause = 1550 / 255;
         for (int i = 255; i >= 0; i--)
         {
             pixels.setBrightness(i);
@@ -218,6 +215,7 @@ void playDarthVadedBreathing(void)
             delay(pause);
         }
     }
+    pixels.setBrightness(255);
 }
 
 void setColorAllRoundPixels(uint32_t color)
@@ -315,43 +313,39 @@ void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, 
 void fetchSubscriberCountIfNeeded()
 {
     int sound;
-    unsigned long currentTime = millis();
-    if (currentTime - lastFetchSubscriberCount >= fetchSubscriberCountInterval)
+
+    int subscriberCount;
+    if (getSubscriberCount(subscriberCount))
     {
-        lastFetchSubscriberCount = currentTime;
-        int subscriberCount;
-        if (getSubscriberCount(subscriberCount))
+        if (subscriberCount != currentSubscriberCount)
         {
-            if (subscriberCount != currentSubscriberCount)
+            if (subscriberCount > currentSubscriberCount)
             {
-                if (subscriberCount > currentSubscriberCount)
+                if (subscriberCount - currentSubscriberCount > 1)
                 {
-                    if (subscriberCount - currentSubscriberCount > 1)
-                    {
-                        sound = soundTwoPlusSubscriber;
-                    }
-                    else
-                    {
-                        sound = random(soundGainingSubscriberCount);
-                    }
-                    currentSubscriberStatus = GAINING;
+                    sound = soundTwoPlusSubscriber;
                 }
                 else
                 {
-                    sound = soundLoosingSubscriber;
-                    currentSubscriberStatus = LOOSING;
+                    sound = random(soundGainingSubscriberCount);
                 }
-                mp3.playTrackNumber(sound, currentVolume, false);
-                drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
-                currentSubscriberCount = subscriberCount;
-                drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
-                showCurrentSubscriberStatus();
+                currentSubscriberStatus = GAINING;
             }
+            else
+            {
+                sound = soundLoosingSubscriber;
+                currentSubscriberStatus = LOOSING;
+            }
+            mp3.playTrackNumber(sound, currentVolume, false);
+            drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
+            currentSubscriberCount = subscriberCount;
+            drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+            showCurrentSubscriberStatus();
         }
-        else
-        {
-            Serial.println("Failed to get subscriber count.");
-        }
+    }
+    else
+    {
+        Serial.println("Failed to get subscriber count.");
     }
 }
 
