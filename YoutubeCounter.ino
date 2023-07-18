@@ -102,7 +102,8 @@ void setup()
     //     cmap[i] = (r << 11) | (g << 5) | b; // Color in 565 format
     // }
 
-    // tft.pushImage(0, 0, 480, 320, image_data_tactical,true,cmap);
+    // tft.setSwapBytes(true);
+    // tft.pushImage(0, 0, 480, 100, image_data_tactical);
 
     if (getSubscriberCount(currentSubscriberCount))
     {
