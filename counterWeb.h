@@ -21,7 +21,7 @@ const char* htmlPageUpdate =
 "}"
 "progress {"
 "    width: 100%;"
-"    height: 40px;"
+"    height: 60px;" /* Increase the height as needed */
 "}"
 "</style>"
 "<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
@@ -58,6 +58,7 @@ const char* htmlPageUpdate =
 "    });"
 "});"
 "</script>";
+
 
 
 WebServer server(80);
