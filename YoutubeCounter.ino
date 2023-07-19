@@ -193,7 +193,7 @@ void showViewCount(void)
     clearScreen();
     drawTactical();
     drawCenteredHorizontalText("ViewCount", 80, aurebeshText, TFT_DARKGREY);
-    drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, TFT_DARKGREY);
+    drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, counterColor);
 }
 
 void showRainbow(void)
