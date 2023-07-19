@@ -83,16 +83,12 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
-    playDarthVadedBreathing();
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_DARKGREY);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
     initWebServer();
-
-    if (getSubscriberCount(currentSubscriberCount))
-    {
-        showSubsriberCount();
-    }
+    getSubscriberCount(currentSubscriberCount);
+    playDarthVadedBreathing();
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCount, 300000L);
@@ -246,6 +242,8 @@ void playDarthVadedBreathing(void)
         {
             pixels.setBrightness(i);
             setColorAllRoundPixels(pixels.Color(255, 0, 0));
+            pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 0, 0));
+            pixels.setPixelColor(gainSubscriberPixel, pixels.Color(255, 0, 0));
             pixels.show();
             delay(pause);
         }
@@ -255,11 +253,15 @@ void playDarthVadedBreathing(void)
         {
             pixels.setBrightness(i);
             setColorAllRoundPixels(pixels.Color(255, 0, 0));
+            pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 0, 0));
+            pixels.setPixelColor(gainSubscriberPixel, pixels.Color(255, 0, 0));
             pixels.show();
             delay(pause);
         }
     }
     pixels.setBrightness(255);
+    pixels.clear();
+    pixels.show();
     clearScreen();
     showSubsriberCount();
 }
