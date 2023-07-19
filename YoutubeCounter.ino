@@ -148,16 +148,19 @@ void loop()
                 switch (rotary)
                 {
                 case CLOCKWISE:
+                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     incrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
 
                     break;
                 case COUNTERCLOCKWISE:
-                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     decrementVolume();
+                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
                     break;
                 }
             }
+            showSubsriberCount();
             break;
         }
     }
