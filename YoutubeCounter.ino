@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include "font/Aurebesh_Bold80pt7b.h"
 #include "font/Aurebesh_Bold40pt7b.h"
+#include "font/Aurebesh_Bold30pt7b.h"
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
@@ -57,7 +58,7 @@ unsigned long rotary_lastTurn = 0;
 
 // Fonts
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
-const GFXfont *aurebeshText = &Aurebesh_Bold40pt7b;
+const GFXfont *aurebeshText = &Aurebesh_Bold30pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
 int currentSubscriberCount = -1;
