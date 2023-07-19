@@ -95,7 +95,7 @@ void setup()
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_DARKGREY);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
     initWebServer();
-    getSubscriberCount(currentSubscriberCount);
+    getYoutubeStatistics(currentSubscriberCount);
     playDarthVadedBreathing();
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
@@ -140,7 +140,10 @@ void loop()
             break;
         }
     }
-    interface.checkReset();
+    if (interface.checkReset())
+    {
+        showSubsriberCount();
+    }
 }
 void drawTactical()
 {
@@ -385,7 +388,7 @@ void fetchSubscriberCount()
     int sound;
 
     int subscriberCount;
-    if (getSubscriberCount(subscriberCount))
+    if (getYoutubeStatistics(subscriberCount))
     {
         if (subscriberCount != currentSubscriberCount)
         {
@@ -436,7 +439,7 @@ void showCurrentSubscriberStatus(void)
     pixels.show();
 }
 
-bool getSubscriberCount(int &subscriberCount)
+bool getYoutubeStatistics(int &subscriberCount)
 {
     HTTPClient http;
 

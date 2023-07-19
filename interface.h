@@ -30,12 +30,14 @@ public:
         return mode;
     }
 
-    void checkReset() {
+    bool checkReset() {
         unsigned long currentMillis = millis();
         unsigned long delayMillis = 10000; // 10 seconds
 
         if(mode != NORMAL && currentMillis - lastChangeMillis >= delayMillis) {
             mode = NORMAL;
+            return true;
         }
+        return false;
     }
 };
