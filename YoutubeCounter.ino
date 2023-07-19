@@ -89,15 +89,9 @@ void setup()
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
     initWebServer();
 
-    clearScreen();
-
-    tft.drawBitmap((tft.width()-344)/2,0,darth_vader_helmet,344,320,TFT_RED);
-
-    drawDisplay();
-
     if (getSubscriberCount(currentSubscriberCount))
     {
-        drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+        showSubsriberCount();
     }
 
     scheduler.addTask(showRandomRoundPixels, 10000L);
@@ -106,7 +100,7 @@ void setup()
     scheduler.addTask(showRainbow, 950000L);
 }
 
-void drawDisplay()
+void drawTactical()
 {
     // Draw 6 vertical lines spaced evenly
     int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
@@ -177,6 +171,13 @@ void initPixels(void)
     pixels.show();
 }
 
+void showSubsriberCount(void)
+{
+    clearScreen();
+    drawTactical();
+    drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+}
+
 void showRainbow(void)
 {
     for (int i = 1; i < 50; i++)
@@ -232,6 +233,9 @@ void initRotaryEncoder(void)
 void playDarthVadedBreathing(void)
 {
     uint32_t pause;
+    clearScreen();
+    tft.drawBitmap((tft.width() - 344) / 2, 0, darth_vader_helmet, 344, 320, TFT_RED);
+
     mp3.playTrackNumber(darthVaderBreathingSound, currentVolume, false);
     delay(500);
     for (int i = 0; i < 2; i++)
@@ -256,6 +260,7 @@ void playDarthVadedBreathing(void)
         }
     }
     pixels.setBrightness(255);
+    clearScreen();
 }
 
 void setColorAllRoundPixels(uint32_t color)
@@ -380,9 +385,7 @@ void fetchSubscriberCount()
                 currentSubscriberStatus = LOOSING;
             }
             mp3.playTrackNumber(sound, currentVolume, false);
-            drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, TFT_BLACK);
-            currentSubscriberCount = subscriberCount;
-            drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+            showSubsriberCount();
             showCurrentSubscriberStatus();
         }
     }
