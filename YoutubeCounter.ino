@@ -61,6 +61,7 @@ const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold30pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
+// Youtube Statistics
 int currentViewCount = -1;
 int currentSubscriberCount = -1;
 enum Subscriber_Status
@@ -70,6 +71,9 @@ enum Subscriber_Status
     GAINING,
 };
 Subscriber_Status currentSubscriberStatus = UNKNNOWN;
+
+// Interface activated by the Rotary Encoder
+
 
 TaskScheduler scheduler;
 
