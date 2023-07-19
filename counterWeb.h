@@ -21,7 +21,7 @@ const char* htmlPageUpdate =
 "}"
 "progress {"
 "    width: 100%;"
-"    height: 60px;" /* Increase the height as needed */
+"    height: 100px;" /* Increase the height as needed */
 "}"
 "</style>"
 "<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
