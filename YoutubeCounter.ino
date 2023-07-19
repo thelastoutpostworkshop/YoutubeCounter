@@ -31,7 +31,7 @@ TFT_eSPI tft = TFT_eSPI();
 #define TXPIN 17
 MP3Player mp3(RXPIN, TXPIN);
 int currentVolume = 15;
-int soundStartup = 12;
+int darthVaderBreathingSound = 12;
 int soundGainingSubscriber[] = {2, 3, 4, 6, 11};
 int soundGainingSubscriberCount = 5;
 int soundLoosingSubscriber = 3;
@@ -83,10 +83,10 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
-    mp3.playTrackNumber(soundStartup, currentVolume, false);
+    playDarthVadedBreathing();
 
-    drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_YELLOW);
-    drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_YELLOW);
+    drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_DARKGREY);
+    drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
     initWebServer();
 
     clearScreen();
@@ -133,18 +133,12 @@ void drawDisplay()
         tft.drawCircle(50, tft.height() / 2, i * 50, TFT_DARKGREEN); // Radius is i * 75 to get a maximum radius of 300
     }
 
-    // Draw small rounded rectangles at the bottom of the screen, between each vertical line
-    for (int i = 1; i <= 6; i++)
-    {
-        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 40, random(20,40), 10, 10, TFT_DARKGREEN);
-    }
-
     // Draw a large ellipse, where one end is on the right and going off the screen on the left
     tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 2, TFT_DARKGREEN);
 
     // Draw two ellipses of this kind
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width()/2, tft.height() / 4, TFT_DARKGREEN);
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width()/3, tft.height() / 8, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 2, tft.height() / 4, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 3, tft.height() / 8, TFT_DARKGREEN);
 }
 
 void loop()
@@ -250,7 +244,7 @@ void initRotaryEncoder(void)
 void playDarthVadedBreathing(void)
 {
     uint32_t pause;
-    mp3.playTrackNumber(soundStartup, currentVolume, false);
+    mp3.playTrackNumber(darthVaderBreathingSound, currentVolume, false);
     delay(500);
     for (int i = 0; i < 2; i++)
     {
@@ -330,8 +324,11 @@ Rotary_Status readRotaryEncoder(void)
 
 void drawHTTPIndicator(uint32_t color)
 {
-    tft.fillRect(0, tft.height() - 3, tft.width(), 3, color);
-    tft.fillRect(50, tft.height() - 6, tft.width() - 100, 3, color);
+    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
+    for (int i = 1; i <= 6; i++)
+    {
+        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(20, 40), 10, 10, color);
+    }
 }
 
 void drawCenteredScreenText(const String &text, const GFXfont *f, uint32_t color)
