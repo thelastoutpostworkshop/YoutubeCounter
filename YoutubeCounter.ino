@@ -7,7 +7,7 @@
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
-#include "tactical.h"
+#include "darth_vader_helmet.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
@@ -91,19 +91,7 @@ void setup()
 
     clearScreen();
 
-    // // Define a grayscale color map from white to black.
-    // uint16_t cmap[256];
-    // for (int i = 0; i < 256; i++)
-    // {
-    //     uint8_t gray = 255 - i;             // invert the grayscale value
-    //     uint16_t r = gray >> 3;             // shift to 5 bit value
-    //     uint16_t g = gray >> 2;             // shift to 6 bit value
-    //     uint16_t b = gray >> 3;             // shift to 5 bit value
-    //     cmap[i] = (r << 11) | (g << 5) | b; // Color in 565 format
-    // }
-
-    // tft.setSwapBytes(true);
-    // tft.pushImage(0, 0, 480, 100, image_data_tactical);
+    tft.drawBitmap((tft.width()-344)/2,0,darth_vader_helmet,344,320,TFT_RED);
 
     drawDisplay();
 
