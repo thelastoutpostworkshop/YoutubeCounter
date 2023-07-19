@@ -261,6 +261,7 @@ void playDarthVadedBreathing(void)
     }
     pixels.setBrightness(255);
     clearScreen();
+    showSubsriberCount();
 }
 
 void setColorAllRoundPixels(uint32_t color)
