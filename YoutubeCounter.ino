@@ -8,6 +8,7 @@
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
+#include "interface.h"
 #include "darth_vader_helmet.h"
 
 #ifdef __AVR__
@@ -73,8 +74,9 @@ enum Subscriber_Status
 Subscriber_Status currentSubscriberStatus = UNKNNOWN;
 
 // Interface activated by the Rotary Encoder
+InterfaceMode interface;
 
-
+// Task Scheduler
 TaskScheduler scheduler;
 
 void setup()
@@ -139,24 +141,20 @@ void loop()
     Rotary_Status rotary = readRotaryEncoder();
     if (rotary != NO_STATUS)
     {
+
         switch (rotary)
         {
         case CLOCKWISE:
-            for (int i = 0; i < PIXELSCOUNT; i++)
-            {
-                pixels.setPixelColor(i, pixels.Color(0, 255, 0));
-            }
-            pixels.show();
+            interface.nextMode();
+
             break;
         case COUNTERCLOCKWISE:
-            for (int i = 0; i < PIXELSCOUNT; i++)
-            {
-                pixels.setPixelColor(i, pixels.Color(0, 0, 255));
-            }
-            pixels.show();
+            interface.prevMode();
+
             break;
         }
     }
+    interface.checkReset();
 }
 
 void initDisplay(void)
