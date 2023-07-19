@@ -104,29 +104,6 @@ void setup()
     scheduler.addTask(showRainbow, 950000L);
 }
 
-void drawTactical()
-{
-    // Draw 6 vertical lines spaced evenly
-    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
-    for (int i = 1; i <= 6; i++)
-    {
-        tft.drawLine(i * lineSpacing, 0, i * lineSpacing, tft.height(), TFT_DARKGREEN);
-    }
-
-    // Draw 4 concentric circles to the left of the screen
-    for (int i = 1; i <= 4; i++)
-    {
-        tft.drawCircle(50, tft.height() / 2, i * 50, TFT_DARKGREEN); // Radius is i * 75 to get a maximum radius of 300
-    }
-
-    // Draw a large ellipse, where one end is on the right and going off the screen on the left
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 2, TFT_DARKGREEN);
-
-    // Draw two ellipses of this kind
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 2, tft.height() / 4, TFT_DARKGREEN);
-    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 3, tft.height() / 8, TFT_DARKGREEN);
-}
-
 void loop()
 {
     server.handleClient();
@@ -153,8 +130,39 @@ void loop()
 
             break;
         }
+        switch (interface.getMode())
+        {
+        case NORMAL:
+            showSubsriberCount();
+            break;
+        case VIEWCOUNT:
+            showViewCount();
+            break;
+        }
     }
     interface.checkReset();
+}
+void drawTactical()
+{
+    // Draw 6 vertical lines spaced evenly
+    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
+    for (int i = 1; i <= 6; i++)
+    {
+        tft.drawLine(i * lineSpacing, 0, i * lineSpacing, tft.height(), TFT_DARKGREEN);
+    }
+
+    // Draw 4 concentric circles to the left of the screen
+    for (int i = 1; i <= 4; i++)
+    {
+        tft.drawCircle(50, tft.height() / 2, i * 50, TFT_DARKGREEN); // Radius is i * 75 to get a maximum radius of 300
+    }
+
+    // Draw a large ellipse, where one end is on the right and going off the screen on the left
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width(), tft.height() / 2, TFT_DARKGREEN);
+
+    // Draw two ellipses of this kind
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 2, tft.height() / 4, TFT_DARKGREEN);
+    tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 3, tft.height() / 8, TFT_DARKGREEN);
 }
 
 void initDisplay(void)
@@ -176,6 +184,13 @@ void showSubsriberCount(void)
     clearScreen();
     drawTactical();
     drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+}
+void showViewCount(void)
+{
+    clearScreen();
+    drawTactical();
+    drawCenteredHorizontalText("ViewCount", 80, aurebeshText, TFT_DARKGREY);
+    drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, TFT_DARKGREY);
 }
 
 void showRainbow(void)
