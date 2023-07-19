@@ -138,6 +138,27 @@ void loop()
         case VIEWCOUNT:
             showViewCount();
             break;
+        case VOLUME:
+            clearScreen();
+            drawTactical();
+            drawCenteredHorizontalText("Volume", 80, aurebeshText, TFT_DARKGREY);
+            while (!interface.checkReset())
+            {
+                rotary = readRotaryEncoder();
+                switch (rotary)
+                {
+                case CLOCKWISE:
+                    incrementVolume();
+                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+
+                    break;
+                case COUNTERCLOCKWISE:
+                    drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+                    decrementVolume();
+                    break;
+                }
+            }
+            break;
         }
     }
     if (interface.checkReset())
@@ -145,6 +166,26 @@ void loop()
         showSubsriberCount();
     }
 }
+// Increment the volume
+void incrementVolume()
+{
+    currentVolume++;
+    if (currentVolume > 30)
+    {
+        currentVolume = 0;
+    }
+}
+
+// Decrement the volume
+void decrementVolume()
+{
+    currentVolume--;
+    if (currentVolume < 0)
+    {
+        currentVolume = 30;
+    }
+}
+
 void drawTactical()
 {
     // Draw 6 vertical lines spaced evenly
