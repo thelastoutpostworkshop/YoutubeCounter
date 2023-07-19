@@ -61,6 +61,7 @@ const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold30pt7b;
 const uint32_t counterColor = TFT_WHITE;
 
+int currentViewCount = -1;
 int currentSubscriberCount = -1;
 enum Subscriber_Status
 {
@@ -457,6 +458,7 @@ bool getSubscriberCount(int &subscriberCount)
             root["items"][0]["statistics"].as<JsonObject>().containsKey("subscriberCount"))
         {
             subscriberCount = root["items"][0]["statistics"]["subscriberCount"].as<int>();
+            currentViewCount = root["items"][0]["statistics"]["viewCount"].as<int>();
             http.end();
             drawHTTPIndicator(TFT_GREEN);
             return true;
