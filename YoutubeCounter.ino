@@ -45,7 +45,7 @@ int test = 1;
 #define Rotary_Data 26
 #define Rotary_PushButton 14
 #define PushButton_Debounce 200
-#define Rotary_Debounce 5
+#define Rotary_Debounce 50
 enum Rotary_Status
 {
     NO_STATUS,
