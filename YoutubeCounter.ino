@@ -457,6 +457,7 @@ void fetchSubscriberCount()
                     sound = soundGainingSubscriber[random(soundGainingSubscriberCount)];
                 }
                 currentSubscriberStatus = GAINING;
+                currentSubscriberCount = subscriberCount;
             }
             else
             {
