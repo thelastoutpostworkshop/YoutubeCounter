@@ -109,6 +109,7 @@ void loop()
 {
     server.handleClient();
     scheduler.runTasks();
+    readInterfaceThroughRotaryEncoder();
 
     if (readRotaryPushButton())
     {
@@ -116,6 +117,33 @@ void loop()
         test += 1;
     }
 
+    if (interface.checkReset())
+    {
+        showSubsriberCount();
+    }
+}
+// Increment the volume
+void incrementVolume()
+{
+    currentVolume++;
+    if (currentVolume > 30)
+    {
+        currentVolume = 0;
+    }
+}
+
+// Decrement the volume
+void decrementVolume()
+{
+    currentVolume--;
+    if (currentVolume < 0)
+    {
+        currentVolume = 30;
+    }
+}
+
+void readInterfaceThroughRotaryEncoder(void)
+{
     Rotary_Status rotary = readRotaryEncoder();
     if (rotary != NO_STATUS)
     {
@@ -153,14 +181,14 @@ void loop()
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     incrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
-                    mp3.playTrackNumber(volumeChangeFeedback,currentVolume,false);
+                    mp3.playTrackNumber(volumeChangeFeedback, currentVolume, false);
                     interface.resetTime();
                     break;
                 case COUNTERCLOCKWISE:
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     decrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
-                    mp3.playTrackNumber(volumeChangeFeedback,currentVolume,false);
+                    mp3.playTrackNumber(volumeChangeFeedback, currentVolume, false);
                     interface.resetTime();
                     break;
                 }
@@ -168,29 +196,6 @@ void loop()
             showSubsriberCount();
             break;
         }
-    }
-    if (interface.checkReset())
-    {
-        showSubsriberCount();
-    }
-}
-// Increment the volume
-void incrementVolume()
-{
-    currentVolume++;
-    if (currentVolume > 30)
-    {
-        currentVolume = 0;
-    }
-}
-
-// Decrement the volume
-void decrementVolume()
-{
-    currentVolume--;
-    if (currentVolume < 0)
-    {
-        currentVolume = 30;
     }
 }
 
