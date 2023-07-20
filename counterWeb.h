@@ -74,17 +74,21 @@ struct Command
 void handleHello(void);
 void handleUpdate(void);
 void handleShowRainbow(void);
+void handleDarthVaderBreathing(void);
 
 //List of external functions
 void showRainbow();
+void playDarthVadedBreathing(void);
 
 const char *updateCommand = "/update";
-const char *showRainbowCommand = "/showRainbow";
+const char *showRainbowCommand = "/show_rainbow";
+const char *playDarthVaderBreathingCommand = "/darth_vader";
 
 Command commands[] = {
     {"/", handleHello},
     {updateCommand, handleUpdate},
     {showRainbowCommand, handleShowRainbow},
+    {playDarthVaderBreathingCommand, handleDarthVaderBreathing},
     //... add more commands as needed
 };
 
@@ -157,6 +161,11 @@ void handleHello(void)
 void handleShowRainbow(void)
 {
     showRainbow();
+    server.send(200, "text/html", htmlPageUpdate);
+}
+void handleDarthVaderBreathing(void)
+{
+    playDarthVadedBreathing();
     server.send(200, "text/html", htmlPageUpdate);
 }
 
