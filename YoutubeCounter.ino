@@ -38,7 +38,7 @@ int darthVaderBreathingSound = 12;
 int soundGainingSubscriberCount = 5;
 int soundLoosingSubscriber = 3;
 int soundTwoPlusSubscriber = 9;
-int volumeChangeFeedback = 7;
+int volumeChangeFeedback = 5;
 int test = 1;
 
 // Rotary Encoder
