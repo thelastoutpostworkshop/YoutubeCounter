@@ -38,6 +38,7 @@ int darthVaderBreathingSound = 12;
 int soundGainingSubscriberCount = 5;
 int soundLoosingSubscriber = 3;
 int soundTwoPlusSubscriber = 9;
+int volumeChangeFeedback = 7;
 int test = 1;
 
 // Rotary Encoder
@@ -152,12 +153,14 @@ void loop()
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     incrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+                    mp3.playTrackNumber(volumeChangeFeedback,currentVolume,false);
                     interface.resetTime();
                     break;
                 case COUNTERCLOCKWISE:
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     decrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+                    mp3.playTrackNumber(volumeChangeFeedback,currentVolume,false);
                     interface.resetTime();
                     break;
                 }
