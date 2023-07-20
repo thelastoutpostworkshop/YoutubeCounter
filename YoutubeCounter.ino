@@ -119,7 +119,7 @@ void loop()
 
     if (interface.checkReset())
     {
-        showSubsriberCount();
+        showSubscriberCount();
     }
 }
 // Increment the volume
@@ -162,7 +162,7 @@ void readInterfaceThroughRotaryEncoder(void)
         switch (interface.getMode())
         {
         case NORMAL:
-            showSubsriberCount();
+            showSubscriberCount();
             break;
         case VIEWCOUNT:
             showViewCount();
@@ -193,7 +193,7 @@ void readInterfaceThroughRotaryEncoder(void)
                     break;
                 }
             }
-            showSubsriberCount();
+            showSubscriberCount();
             break;
         }
     }
@@ -236,7 +236,7 @@ void initPixels(void)
     pixels.show();
 }
 
-void showSubsriberCount(void)
+void showSubscriberCount(void)
 {
     clearScreen();
     drawTactical();
@@ -339,7 +339,7 @@ void playDarthVadedBreathing(void)
     pixels.clear();
     pixels.show();
     clearScreen();
-    showSubsriberCount();
+    showSubscriberCount();
 }
 
 void setColorAllRoundPixels(uint32_t color)
@@ -439,39 +439,43 @@ void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, 
 
 void fetchSubscriberCount()
 {
-    int sound;
-
     int subscriberCount;
     if (getYoutubeStatistics(subscriberCount))
     {
-        if (subscriberCount != currentSubscriberCount)
-        {
-            if (subscriberCount > currentSubscriberCount)
-            {
-                if (subscriberCount - currentSubscriberCount > 1)
-                {
-                    sound = soundTwoPlusSubscriber;
-                }
-                else
-                {
-                    sound = soundGainingSubscriber[random(soundGainingSubscriberCount)];
-                }
-                currentSubscriberStatus = GAINING;
-                currentSubscriberCount = subscriberCount;
-            }
-            else
-            {
-                sound = soundLoosingSubscriber;
-                currentSubscriberStatus = LOOSING;
-            }
-            mp3.playTrackNumber(sound, currentVolume, false);
-            showSubsriberCount();
-            showCurrentSubscriberStatus();
-        }
+        applyNewSubscriberCount(subscriberCount);
     }
     else
     {
         Serial.println("Failed to get subscriber count.");
+    }
+}
+
+void applyNewSubscriberCount(int newSubscriberCount)
+{
+    int sound;
+    if (newSubscriberCount != currentSubscriberCount)
+    {
+        if (newSubscriberCount > currentSubscriberCount)
+        {
+            if (newSubscriberCount - currentSubscriberCount > 1)
+            {
+                sound = soundTwoPlusSubscriber;
+            }
+            else
+            {
+                sound = soundGainingSubscriber[random(soundGainingSubscriberCount)];
+            }
+            currentSubscriberStatus = GAINING;
+            currentSubscriberCount = newSubscriberCount;
+        }
+        else
+        {
+            sound = soundLoosingSubscriber;
+            currentSubscriberStatus = LOOSING;
+        }
+        mp3.playTrackNumber(sound, currentVolume, false);
+        showSubscriberCount();
+        showCurrentSubscriberStatus();
     }
 }
 
