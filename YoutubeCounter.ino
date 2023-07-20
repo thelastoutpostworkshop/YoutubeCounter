@@ -142,7 +142,7 @@ void loop()
             clearScreen();
             drawTactical();
             drawCenteredHorizontalText("Volume", 80, aurebeshText, TFT_DARKGREY);
-            while (!interface.checkReset())
+            while (!interface.checkReset() && !readRotaryPushButton())
             {
                 rotary = readRotaryEncoder();
                 switch (rotary)
