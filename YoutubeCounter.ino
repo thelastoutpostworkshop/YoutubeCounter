@@ -142,6 +142,7 @@ void loop()
             clearScreen();
             drawTactical();
             drawCenteredHorizontalText("Volume", 80, aurebeshText, TFT_DARKGREY);
+            drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
             while (!interface.checkReset() && !readRotaryPushButton())
             {
                 rotary = readRotaryEncoder();
@@ -151,12 +152,13 @@ void loop()
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     incrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
-
+                    interface.resetTime();
                     break;
                 case COUNTERCLOCKWISE:
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     decrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
+                    interface.resetTime();
                     break;
                 }
             }

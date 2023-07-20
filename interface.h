@@ -1,40 +1,55 @@
-enum Interface_Mode {
+enum Interface_Mode
+{
     NORMAL,
     VIEWCOUNT,
     VOLUME,
     Interface_Mode_COUNT
 };
 
-class InterfaceMode {
+class InterfaceMode
+{
     Interface_Mode mode;
     unsigned long lastChangeMillis;
 
 public:
     InterfaceMode() : mode(NORMAL), lastChangeMillis(millis()) {}
 
-    void nextMode() {
+    void nextMode()
+    {
         mode = static_cast<Interface_Mode>((mode + 1) % Interface_Mode_COUNT);
         lastChangeMillis = millis();
     }
 
-    void prevMode() {
-        if (mode == 0) {
+    void prevMode()
+    {
+        if (mode == 0)
+        {
             mode = static_cast<Interface_Mode>(Interface_Mode_COUNT - 1);
-        } else {
+        }
+        else
+        {
             mode = static_cast<Interface_Mode>(mode - 1);
         }
         lastChangeMillis = millis();
     }
 
-    Interface_Mode getMode() {
+    Interface_Mode getMode()
+    {
         return mode;
     }
 
-    bool checkReset() {
+    void resetTime()
+    {
+        lastChangeMillis = millis();
+    }
+
+    bool checkReset()
+    {
         unsigned long currentMillis = millis();
         unsigned long delayMillis = 10000; // 10 seconds
 
-        if(mode != NORMAL && currentMillis - lastChangeMillis >= delayMillis) {
+        if (mode != NORMAL && currentMillis - lastChangeMillis >= delayMillis)
+        {
             mode = NORMAL;
             return true;
         }
