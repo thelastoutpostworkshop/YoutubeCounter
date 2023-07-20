@@ -9,57 +9,55 @@
 
 const char *hostName = "youtube";
 
-const char* htmlPageUpdate = 
-"<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
-"<style>"
-"body {"
-"    font-size: 40px;" /* Change the size as needed */
-"}"
-"input[type=submit], input[type=file] {"
-"    font-size: 40px;"    /* Change the size as needed */
-"    padding: 10px 20px;" /* Change the padding as needed */
-"}"
-"progress {"
-"    width: 100%;"
-"    height: 100px;" /* Increase the height as needed */
-"}"
-"</style>"
-"<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
-"<input type='file' name='update'>"
-"<input type='submit' value='Update'>"
-"</form>"
-"<progress id='prg' value='0' max='100'></progress>"
-"<script>"
-"$('form').submit(function(e){"
-"    e.preventDefault();"
-"    var form = $('#upload_form')[0];"
-"    var data = new FormData(form);"
-"    $.ajax({"
-"        url: '/upload',"
-"        type: 'POST',"
-"        data: data,"
-"        contentType: false,"
-"        processData:false,"
-"        xhr: function() {"
-"            var xhr = new window.XMLHttpRequest();"
-"            xhr.upload.addEventListener('progress', function(evt) {"
-"                if (evt.lengthComputable) {"
-"                    var per = evt.loaded / evt.total;"
-"                    $('#prg').val(Math.round(per*100));"
-"                }"
-"            }, false);"
-"            return xhr;"
-"        },"
-"        success:function(d, s) {"
-"            console.log('success!')"
-"        },"
-"        error: function (a, b, c) {"
-"        }"
-"    });"
-"});"
-"</script>";
-
-
+const char *htmlPageUpdate =
+    "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
+    "<style>"
+    "body {"
+    "    font-size: 40px;" /* Change the size as needed */
+    "}"
+    "input[type=submit], input[type=file] {"
+    "    font-size: 40px;"    /* Change the size as needed */
+    "    padding: 10px 20px;" /* Change the padding as needed */
+    "}"
+    "progress {"
+    "    width: 100%;"
+    "    height: 100px;" /* Increase the height as needed */
+    "}"
+    "</style>"
+    "<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
+    "<input type='file' name='update'>"
+    "<input type='submit' value='Update'>"
+    "</form>"
+    "<progress id='prg' value='0' max='100'></progress>"
+    "<script>"
+    "$('form').submit(function(e){"
+    "    e.preventDefault();"
+    "    var form = $('#upload_form')[0];"
+    "    var data = new FormData(form);"
+    "    $.ajax({"
+    "        url: '/upload',"
+    "        type: 'POST',"
+    "        data: data,"
+    "        contentType: false,"
+    "        processData:false,"
+    "        xhr: function() {"
+    "            var xhr = new window.XMLHttpRequest();"
+    "            xhr.upload.addEventListener('progress', function(evt) {"
+    "                if (evt.lengthComputable) {"
+    "                    var per = evt.loaded / evt.total;"
+    "                    $('#prg').val(Math.round(per*100));"
+    "                }"
+    "            }, false);"
+    "            return xhr;"
+    "        },"
+    "        success:function(d, s) {"
+    "            console.log('success!')"
+    "        },"
+    "        error: function (a, b, c) {"
+    "        }"
+    "    });"
+    "});"
+    "</script>";
 
 WebServer server(80);
 
@@ -75,20 +73,25 @@ void handleHello(void);
 void handleUpdate(void);
 void handleShowRainbow(void);
 void handleDarthVaderBreathing(void);
+void handleDemoPlusOneSubscriber(void);
 
-//List of external functions
+// List of external functions
 void showRainbow();
 void playDarthVadedBreathing(void);
+void applyNewSubscriberCount(int);
+extern int currentSubscriberCount;
 
 const char *updateCommand = "/update";
 const char *showRainbowCommand = "/show_rainbow";
 const char *playDarthVaderBreathingCommand = "/darth_vader";
+const char *demoPlusOneSubscriberCommand = "/demo_plus_one_subscriber";
 
 Command commands[] = {
     {"/", handleHello},
     {updateCommand, handleUpdate},
     {showRainbowCommand, handleShowRainbow},
     {playDarthVaderBreathingCommand, handleDarthVaderBreathing},
+    {demoPlusOneSubscriberCommand, handleDemoPlusOneSubscriber},
     //... add more commands as needed
 };
 
@@ -158,15 +161,20 @@ void handleHello(void)
     server.send(200, "text/html", body);
 }
 
+void handleDemoPlusOneSubscriber(void)
+{
+    applyNewSubscriberCount(currentSubscriberCount + 1);
+    server.send(200);
+}
 void handleShowRainbow(void)
 {
     showRainbow();
-    server.send(200, "text/html", htmlPageUpdate);
+    server.send(200);
 }
 void handleDarthVaderBreathing(void)
 {
     playDarthVadedBreathing();
-    server.send(200, "text/html", htmlPageUpdate);
+    server.send(200);
 }
 
 void handleUpdate(void)
