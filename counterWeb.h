@@ -73,8 +73,10 @@ struct Command
 // List of Commands
 void handleHello(void);
 void handleUpdate(void);
+void showRainbow(void);
 
 const char *updateCommand = "/update";
+const char *showRainbowCommand = "/showRainbow";
 
 Command commands[] = {
     {"/", handleHello},
