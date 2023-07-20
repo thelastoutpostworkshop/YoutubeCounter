@@ -73,7 +73,10 @@ struct Command
 // List of Commands
 void handleHello(void);
 void handleUpdate(void);
-void showRainbow(void);
+void handleShowRainbow(void);
+
+//List of external functions
+void showRainbow();
 
 const char *updateCommand = "/update";
 const char *showRainbowCommand = "/showRainbow";
@@ -81,6 +84,7 @@ const char *showRainbowCommand = "/showRainbow";
 Command commands[] = {
     {"/", handleHello},
     {updateCommand, handleUpdate},
+    {showRainbowCommand, handleShowRainbow},
     //... add more commands as needed
 };
 
@@ -148,6 +152,12 @@ void handleHello(void)
                   "<p style='font-size: 24px;'>Connected to: " + String(ssid) + "</p>" +
                   "<p style='font-size: 24px;'><br/>" + commandsList() + "</p>";
     server.send(200, "text/html", body);
+}
+
+void handleShowRainbow(void)
+{
+    showRainbow();
+    server.send(200, "text/html", htmlPageUpdate);
 }
 
 void handleUpdate(void)
