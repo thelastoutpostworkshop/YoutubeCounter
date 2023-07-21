@@ -79,11 +79,14 @@ void handleDemoMinusOneSubscriber(void);
 void handleDemoPlusTwoSubscriber(void);
 void handleConfigureYoutubeSettings(void);
 
-// List of external functions
+// List of external functions and variables
 void showRainbow();
 void playDarthVadedBreathing(void);
 void applyNewSubscriberCount(int);
 extern int currentSubscriberCount;
+extern Preferences prefs;
+extern const char *channelIdPreference;
+extern const char *apiKeyPreference;
 
 Command fetchCommands[] = {
     {"Home", "/", handleHello},
@@ -98,6 +101,9 @@ Command postCommands[] = {
     {"Update", "/update", handleUpdate},
     {"Configure Youtube Settings", "/youtube_settings", handleConfigureYoutubeSettings},
 };
+
+const char *uploadEndpoint = "/upload";
+const char *saveYoutubeSettingsEndpoint = "/save_youtube_settings";
 
 String commandsList(void)
 {
@@ -181,7 +187,9 @@ void handleConfigureYoutubeSettings(void)
 
     String html = "<html>\
                    <body>\
-                     <form action=\"/store\" method=\"post\">\
+                     <form action='";
+    html += saveYoutubeSettingsEndpoint; 
+    html += "' method=\"post\">\
                        Channel ID:<br>\
                        <input type=\"text\" name=\"channel_id\">\
                        <br>\
@@ -260,7 +268,7 @@ void setupCommands(void)
 
     /*handling uploading firmware file */
     server.on(
-        "/upload", HTTP_POST, []()
+        uploadEndpoint, HTTP_POST, []()
         {
     server.sendHeader("Connection", "close");
     server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
@@ -298,15 +306,15 @@ void setupCommands(void)
         });
 
     // Handling configuration of youtube settings
-    server.on("/store", HTTP_POST, []()
+    server.on(saveYoutubeSettingsEndpoint, HTTP_POST, []()
               {
     if (server.hasArg("channel_id") && server.hasArg("api_key")) {
       String channelId = server.arg("channel_id");
       String apiKey = server.arg("api_key");
-      
-    //   nvs.writeString("channel_id", channelId.c_str());
-    //   nvs.writeString("api_key", apiKey.c_str());
 
+      prefs.putString(channelIdPreference,channelId);
+      prefs.putString(apiKeyPreference,apiKey);
+      
       server.send(200, "text/plain", "Data stored successfully.");
     } else {
       server.send(400, "text/plain", "Missing data in request.");

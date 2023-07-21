@@ -84,6 +84,8 @@ TaskScheduler scheduler;
 // Preferences to store values into non-volatile memory
 Preferences prefs;
 const char *volumePreference = "volume";
+const char *channelIdPreference = "channel_id";
+const char *apiKeyPreference = "api_key";
 
 void setup()
 {
