@@ -124,8 +124,16 @@ String commandsList(void)
                           @keyframes spin {\
                             to { transform: rotate(360deg); }\
                           }\
+                          .column {\
+                            width: 50%;\
+                            padding: 10px;\
+                            box-sizing: border-box;\
+                          }\
+                          .left { float: left; }\
+                          .right { float: right; }\
                           </style>\
-                          Available fetchCommands:<br/>";
+                          <div class='column left'>\
+                          <h2>Available Fetch Commands</h2>";
     for (Command &cmd : fetchCommands)
     {
         if (cmd.endpoint == "/update")
@@ -148,6 +156,9 @@ String commandsList(void)
         commandList += cmd.name;
         commandList += "</button><br/>";
     }
+    commandList += "</div>\
+                    <div class='column right'>\
+                    <h2>Available Post Commands</h2>";
     for (Command &cmd : postCommands)
     {
 
@@ -158,6 +169,8 @@ String commandsList(void)
         commandList += cmd.name;
         commandList += "</button><br/>";
     }
+    commandList += "</div>";
+
     return commandList;
 }
 
@@ -188,7 +201,7 @@ void handleConfigureYoutubeSettings(void)
     String html = "<html>\
                    <body>\
                      <form action='";
-    html += saveYoutubeSettingsEndpoint; 
+    html += saveYoutubeSettingsEndpoint;
     html += "' method=\"post\">\
                        Channel ID:<br>\
                        <input type=\"text\" name=\"channel_id\">\
