@@ -287,6 +287,7 @@ void showRandomRoundPixels(void)
 
     // Show the newly colored pixels
     pixels.show();
+    showCurrentSubscriberStatus();
 }
 
 void clearScreen(void)
