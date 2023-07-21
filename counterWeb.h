@@ -174,8 +174,7 @@ void handleConfigureYoutubeSettings(void)
 {
     server.sendHeader("Connection", "close");
 
-    String html = "<html>\
-                    <body>\
+    String html = "<script>\
                       <form action=\"/store\" method=\"post\">\
                         Channel ID:<br>\
                         <input type=\"text\" name=\"channel_id\">\
@@ -185,8 +184,7 @@ void handleConfigureYoutubeSettings(void)
                         <br><br>\
                         <input type=\"submit\" value=\"Submit\">\
                       </form>\
-                    </body>\
-                   </html>";
+                   </script>";
     server.send(200, "text/html", html);
 }
 
