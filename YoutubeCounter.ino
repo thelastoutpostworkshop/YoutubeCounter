@@ -472,6 +472,7 @@ void applyNewSubscriberCount(int newSubscriberCount)
         {
             sound = soundLoosingSubscriber;
             currentSubscriberStatus = LOOSING;
+            currentSubscriberCount = newSubscriberCount;
         }
         mp3.playTrackNumber(sound, currentVolume, false);
         showSubscriberCount();
