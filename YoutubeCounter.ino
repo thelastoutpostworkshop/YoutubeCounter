@@ -119,7 +119,7 @@ void setup()
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showRainbow, 950000L);
-    scheduler.addTask(moveSprite, 3000);
+    scheduler.addTask(moveSprite, 100L);
 }
 
 void loop()
@@ -156,14 +156,19 @@ void createSprites(void)
 
 void moveSprite()
 {
-    // Erase the old sprite by drawing it in transparent color
-    tft.fillRect(t_down_positionX, 0, 20, 20, TFT_BLACK);
+    static uint16_t bg[20 * 20];  // buffer to hold the pixels under the sprite
 
-    t_down_positionX += t_down_direction * 20; // Move the sprite
+    // If sprite moved at least once, restore the previous background
+    if (t_down_positionX > 0) 
+    {
+        tft.pushRect(t_down_positionX, 0, 20, 20, bg);
+    }
+
+    t_down_positionX += t_down_direction * 10; // Move the sprite
 
     // Check if the sprite hits the screen bounds
     if (t_down_positionX >= (tft.width() - 20))
-    {                          // 480 should be replaced with your screen width
+    {
         t_down_direction = -1; // Change direction to left
     }
     else if (t_down_positionX <= 0)
@@ -171,9 +176,13 @@ void moveSprite()
         t_down_direction = 1; // Change direction to right
     }
 
+    // Read the pixels under the sprite to restore them later
+    tft.readRect(t_down_positionX, 0, 20, 20, bg);
+
     // Draw the sprite at the new position
     t_down.pushSprite(t_down_positionX, 0);
 }
+
 
 // Increment the volume
 void incrementVolume()
