@@ -96,7 +96,7 @@ Command commands[] = {
     {showRainbowCommand, handleShowRainbow},
     {playDarthVaderBreathingCommand, handleDarthVaderBreathing},
     {demoPlusOneSubscriberCommand, handleDemoPlusOneSubscriber},
-    {demoPlusOneSubscriberCommand, handleDemoMinusOneSubscriber},
+    {demoMinusOneSubscriberCommand, handleDemoMinusOneSubscriber},
     {demoPlusTwoSubscriberCommand, handleDemoPlusTwoSubscriber},
     //... add more commands as needed
 };
