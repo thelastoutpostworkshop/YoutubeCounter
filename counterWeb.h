@@ -296,6 +296,21 @@ void setupCommands(void)
                 }
             }
         });
+
+    // Handling configuration of youtube settings
+    server.on("/store", HTTP_POST, []()
+              {
+    if (server.hasArg("channel_id") && server.hasArg("api_key")) {
+      String channelId = server.arg("channel_id");
+      String apiKey = server.arg("api_key");
+      
+    //   nvs.writeString("channel_id", channelId.c_str());
+    //   nvs.writeString("api_key", apiKey.c_str());
+
+      server.send(200, "text/plain", "Data stored successfully.");
+    } else {
+      server.send(400, "text/plain", "Missing data in request.");
+    } });
 }
 
 void initWebServer()
