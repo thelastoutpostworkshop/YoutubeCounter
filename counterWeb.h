@@ -129,9 +129,17 @@ String commandsList(void)
                             padding: 10px;\
                             box-sizing: border-box;\
                           }\
+                          .separator {\
+                            width: 2px;\
+                            background: #ddd;\
+                            height: 100%;\
+                            position: absolute;\
+                            left: 50%;\
+                            top: 0;\
+                          }\
                           .left { float: left; }\
                           .right { float: right; }\
-                          h2 { text-align: center; }\
+                          h1 { text-align: center; }\
                           button {\
                             font-size: 40px;\
                             padding: 15px;\
@@ -148,6 +156,7 @@ String commandsList(void)
                             transform: scale(0.95);\
                           }\
                           </style>\
+                          <div class='separator'></div>\
                           <div class='column left'>\
                           <h1>Commands</h1>";
     for (Command &cmd : fetchCommands)
@@ -174,7 +183,7 @@ String commandsList(void)
     }
     commandList += "</div>\
                     <div class='column right'>\
-                    <h1>Settings</h1>";
+                    <h1>Settings Configuration</h1>";
     for (Command &cmd : postCommands)
     {
 
