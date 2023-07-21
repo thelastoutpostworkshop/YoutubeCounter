@@ -74,6 +74,7 @@ void handleUpdate(void);
 void handleShowRainbow(void);
 void handleDarthVaderBreathing(void);
 void handleDemoPlusOneSubscriber(void);
+void handleDemoPlusTwoSubscriber(void);
 
 // List of external functions
 void showRainbow();
@@ -85,6 +86,7 @@ const char *updateCommand = "/update";
 const char *showRainbowCommand = "/show_rainbow";
 const char *playDarthVaderBreathingCommand = "/darth_vader";
 const char *demoPlusOneSubscriberCommand = "/demo_plus_one_subscriber";
+const char *demoPlusTwoSubscriberCommand = "/demo_plus_two_subscriber";
 
 Command commands[] = {
     {"/", handleHello},
@@ -92,6 +94,7 @@ Command commands[] = {
     {showRainbowCommand, handleShowRainbow},
     {playDarthVaderBreathingCommand, handleDarthVaderBreathing},
     {demoPlusOneSubscriberCommand, handleDemoPlusOneSubscriber},
+    {demoPlusTwoSubscriberCommand, handleDemoPlusTwoSubscriber},
     //... add more commands as needed
 };
 
@@ -164,6 +167,11 @@ void handleHello(void)
 void handleDemoPlusOneSubscriber(void)
 {
     applyNewSubscriberCount(currentSubscriberCount + 1);
+    server.send(200);
+}
+void handleDemoPlusTwoSubscriber(void)
+{
+    applyNewSubscriberCount(currentSubscriberCount + 2);
     server.send(200);
 }
 void handleShowRainbow(void)
