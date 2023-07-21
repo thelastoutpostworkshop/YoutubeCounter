@@ -42,13 +42,32 @@ const char *css = "<style>\
                           .left { float: left; }\
                           .right { float: right; }\
                           h1 { text-align: center; }\
-                          .label {\
-                            font-size: 40px;\
-                            }\
-                          input {\
-                            font-size: 40px;\
-                            padding: 10px 20px;\
-                            }\
+                    .label {\
+                      font-weight: bold;\
+                      font-size: 25px;\
+                    }\
+                    input[type=\"text\"] {\
+                      background-color: #f3f3f3;\
+                      border: 1px solid #ccc;\
+                      padding: 10px;\
+                      width: 50%;\
+                      box-sizing: border-box;\
+                      font-size: 25px;\
+                    }\
+                    input[type=\"submit\"] {\
+                      background-color: #008800;\
+                      color: white;\
+                      border: none;\
+                      padding: 10px;\
+                      text-transform: uppercase;\
+                      cursor: pointer;\
+                      font-size: 25px;\
+                      margin-top: 10px;\
+                      width: 50%;\
+                    }\
+                    input[type=\"submit\"]:hover {\
+                      background-color: #006600;\
+                    }\
                           button {\
                             font-size: 40px;\
                             padding: 15px;\
@@ -223,14 +242,13 @@ void sendPlainText(const char *fmt, ...)
 void handleHello(void)
 {
     String body = "<div style='border: 2px solid #008800; background-color: #e6f7e6; padding: 10px; border-radius: 10px; margin: 10px; font-size: 24px;'>\
-                   URL: " + String(hostName) + ".local<br/>" +
-                   "IP address: " + WiFi.localIP().toString() + "<br/>" +
-                   "Connected to: " + String(ssid) + 
-                   "</div>"
-                   + commandsList() ;
+                   URL: " +
+                  String(hostName) + ".local<br/>" +
+                  "IP address: " + WiFi.localIP().toString() + "<br/>" +
+                  "Connected to: " + String(ssid) +
+                  "</div>" + commandsList();
     server.send(200, "text/html", body);
 }
-
 
 void handleConfigureYoutubeSettings(void)
 {
