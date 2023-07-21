@@ -86,17 +86,18 @@ void applyNewSubscriberCount(int);
 extern int currentSubscriberCount;
 
 Command fetchCommands[] = {
-    {"Home","/", handleHello},
-    {"Update","/update", handleUpdate},
-    {"Rainbow","/show_rainbow", handleShowRainbow},
-    {"Darth Vader Breathing","/darth_vader", handleDarthVaderBreathing},
-    {"Demo Add 1 Subscriber","/demo_plus_one_subscriber", handleDemoPlusOneSubscriber},
-    {"Demo Remove 1 Subscriber","/demo_minus_one_subscriber", handleDemoMinusOneSubscriber},
-    {"Demo Add 2 Subscriber", "/demo_plus_two_subscriber",handleDemoPlusTwoSubscriber},
-    {"Configure Youtube Settings", "/youtube_settings", handleConfigureYoutubeSettings},
-    //... add more fetchCommands as needed
+    {"Home", "/", handleHello},
+    {"Rainbow", "/show_rainbow", handleShowRainbow},
+    {"Darth Vader Breathing", "/darth_vader", handleDarthVaderBreathing},
+    {"Demo Add 1 Subscriber", "/demo_plus_one_subscriber", handleDemoPlusOneSubscriber},
+    {"Demo Remove 1 Subscriber", "/demo_minus_one_subscriber", handleDemoMinusOneSubscriber},
+    {"Demo Add 2 Subscriber", "/demo_plus_two_subscriber", handleDemoPlusTwoSubscriber},
 };
 
+Command postCommands[] = {
+    {"Update", "/update", handleUpdate},
+    {"Configure Youtube Settings", "/youtube_settings", handleConfigureYoutubeSettings},
+};
 
 String commandsList(void)
 {
@@ -137,6 +138,16 @@ String commandsList(void)
             commandList += cmd.name;
             commandList += "\"; })'>";
         }
+
+        commandList += cmd.name;
+        commandList += "</button><br/>";
+    }
+    for (Command &cmd : postCommands)
+    {
+
+        commandList += "<button style='font-size: 40px; padding: 15px; width: 90%; box-sizing: border-box; margin: 20px 5%; border-radius: 25px;' onclick=\"location.href='";
+        commandList += cmd.endpoint;
+        commandList += "'\">";
 
         commandList += cmd.name;
         commandList += "</button><br/>";
@@ -236,6 +247,10 @@ void setupCommands(void)
 {
     // Register the command handlers with the web server
     for (Command &cmd : fetchCommands)
+    {
+        server.on(cmd.endpoint, HTTP_GET, cmd.handler);
+    }
+    for (Command &cmd : postCommands)
     {
         server.on(cmd.endpoint, HTTP_GET, cmd.handler);
     }
