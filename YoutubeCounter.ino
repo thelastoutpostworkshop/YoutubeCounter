@@ -99,7 +99,7 @@ void setup()
     mp3.initialize();
 
     prefs.begin("youtube");
-    currentVolume = prefs.getInt("volumePreference", 15);
+    currentVolume = prefs.getInt(volumePreference, 15);
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_DARKGREY);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
