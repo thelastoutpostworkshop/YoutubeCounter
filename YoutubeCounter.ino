@@ -2,6 +2,7 @@
 #include <TFT_eSPI.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <Preferences.h>
 #include "font/Aurebesh_Bold80pt7b.h"
 #include "font/Aurebesh_Bold40pt7b.h"
 #include "font/Aurebesh_Bold30pt7b.h"
@@ -80,6 +81,10 @@ InterfaceMode interface;
 // Task Scheduler
 TaskScheduler scheduler;
 
+// Preferences to store values into non-volatile memory
+Preferences prefs;
+const char *volumePreference = "volume";
+
 void setup()
 {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -92,6 +97,9 @@ void setup()
     initDisplay();
     initRotaryEncoder();
     mp3.initialize();
+
+    prefs.begin("youtube");
+    currentVolume = prefs.getInt("volumePreference", 15);
 
     drawCenteredHorizontalText("Connect", 80, aurebeshText, TFT_DARKGREY);
     drawCenteredHorizontalText("Wifi", 160, aurebeshText, TFT_DARKGREY);
@@ -130,6 +138,7 @@ void incrementVolume()
     {
         currentVolume = 0;
     }
+    prefs.putInt(volumePreference, currentVolume);
 }
 
 // Decrement the volume
@@ -140,6 +149,7 @@ void decrementVolume()
     {
         currentVolume = 30;
     }
+    prefs.putInt(volumePreference, currentVolume);
 }
 
 void readInterfaceThroughRotaryEncoder(void)
