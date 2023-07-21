@@ -64,6 +64,7 @@ WebServer server(80);
 // Define a command structure
 struct Command
 {
+    const char *name;
     const char *endpoint;
     void (*handler)();
 };
@@ -84,25 +85,18 @@ void playDarthVadedBreathing(void);
 void applyNewSubscriberCount(int);
 extern int currentSubscriberCount;
 
-const char *updateCommand = "/update";
-const char *showRainbowCommand = "/show_rainbow";
-const char *playDarthVaderBreathingCommand = "/darth_vader";
-const char *demoPlusOneSubscriberCommand = "/demo_plus_one_subscriber";
-const char *demoMinusOneSubscriberCommand = "/demo_minus_one_subscriber";
-const char *demoPlusTwoSubscriberCommand = "/demo_plus_two_subscriber";
-const char *configureYoutubeSettingsCommand = "/youtube_settings";
-
-Command commands[] = {
-    {"/", handleHello},
-    {updateCommand, handleUpdate},
-    {showRainbowCommand, handleShowRainbow},
-    {playDarthVaderBreathingCommand, handleDarthVaderBreathing},
-    {demoPlusOneSubscriberCommand, handleDemoPlusOneSubscriber},
-    {demoMinusOneSubscriberCommand, handleDemoMinusOneSubscriber},
-    {demoPlusTwoSubscriberCommand, handleDemoPlusTwoSubscriber},
-    {configureYoutubeSettingsCommand, handleConfigureYoutubeSettings},
-    //... add more commands as needed
+Command fetchCommands[] = {
+    {"Home","/", handleHello},
+    {"Update","/update", handleUpdate},
+    {"Rainbow","/show_rainbow", handleShowRainbow},
+    {"Darth Vader Breathing","/darth_vader", handleDarthVaderBreathing},
+    {"Demo Add 1 Subscriber","/demo_plus_one_subscriber", handleDemoPlusOneSubscriber},
+    {"Demo Remove 1 Subscriber","/demo_minus_one_subscriber", handleDemoMinusOneSubscriber},
+    {"Demo Add 2 Subscriber", "/demo_plus_two_subscriber",handleDemoPlusTwoSubscriber},
+    {"Configure Youtube Settings", "/youtube_settings", handleConfigureYoutubeSettings},
+    //... add more fetchCommands as needed
 };
+
 
 String commandsList(void)
 {
@@ -124,10 +118,10 @@ String commandsList(void)
                             to { transform: rotate(360deg); }\
                           }\
                           </style>\
-                          Available commands:<br/>";
-    for (Command &cmd : commands)
+                          Available fetchCommands:<br/>";
+    for (Command &cmd : fetchCommands)
     {
-        if (cmd.endpoint == updateCommand)
+        if (cmd.endpoint == "/update")
         {
             commandList += "<button style='font-size: 40px; padding: 15px; width: 90%; box-sizing: border-box; margin: 20px 5%; border-radius: 25px;' onclick=\"location.href='";
             commandList += cmd.endpoint;
@@ -140,11 +134,11 @@ String commandsList(void)
             commandList += "' style='font-size: 40px; padding: 15px; width: 90%; box-sizing: border-box; margin: 20px 5%; border-radius: 25px;' onclick='this.classList.add(\"loading\"); this.innerHTML=\"<div class=spinner></div>\"; fetch(\"";
             commandList += cmd.endpoint;
             commandList += "\").then(() => { this.classList.remove(\"loading\"); this.textContent=\"";
-            commandList += cmd.endpoint;
+            commandList += cmd.name;
             commandList += "\"; })'>";
         }
 
-        commandList += cmd.endpoint;
+        commandList += cmd.name;
         commandList += "</button><br/>";
     }
     return commandList;
@@ -185,7 +179,8 @@ void handleConfigureYoutubeSettings(void)
                         <input type=\"submit\" value=\"Submit\">\
                       </form>\
                    </script>";
-    server.send(200, "text/html", html);
+    // server.send(200, "text/html", html);
+    server.send(200, "text/html", htmlPageUpdate);
 }
 
 void handleDemoPlusOneSubscriber(void)
@@ -240,7 +235,7 @@ void handleNotFound()
 void setupCommands(void)
 {
     // Register the command handlers with the web server
-    for (Command &cmd : commands)
+    for (Command &cmd : fetchCommands)
     {
         server.on(cmd.endpoint, HTTP_GET, cmd.handler);
     }
