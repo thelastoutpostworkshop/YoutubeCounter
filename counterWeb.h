@@ -9,6 +9,56 @@
 
 const char *hostName = "youtube";
 
+const char *css = "<style>\
+                          .loading {\
+                            background-color: #f3f3f3;\
+                            cursor: not-allowed;\
+                          }\
+                          .spinner {\
+                            display: inline-block;\
+                            width: 40px;\
+                            height: 40px;\
+                            border: 5px solid rgba(0,0,0,.2);\
+                            border-top-color: #008000;\
+                            border-radius: 100%;\
+                            animation: spin 1s linear infinite;\
+                          }\
+                          @keyframes spin {\
+                            to { transform: rotate(360deg); }\
+                          }\
+                          .column {\
+                            width: 50%;\
+                            padding: 10px;\
+                            box-sizing: border-box;\
+                          }\
+                          .separator {\
+                            width: 2px;\
+                            background: #ddd;\
+                            height: 100%;\
+                            position: absolute;\
+                            left: 50%;\
+                            top: 0;\
+                          }\
+                          .left { float: left; }\
+                          .right { float: right; }\
+                          h1 { text-align: center; }\
+                          button {\
+                            font-size: 40px;\
+                            padding: 15px;\
+                            width: 90%;\
+                            box-sizing: border-box;\
+                            margin: 20px 5%;\
+                            border-radius: 25px;\
+                            transition: background-color 0.3s, transform 0.3s;\
+                          }\
+                          button:hover {\
+                            background-color: #ddd;\
+                          }\
+                          button:active {\
+                            transform: scale(0.95);\
+                          }\
+                          </style>";
+
 const char *htmlPageUpdate =
     "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
     "<style>"
@@ -107,56 +157,9 @@ const char *saveYoutubeSettingsEndpoint = "/save_youtube_settings";
 
 String commandsList(void)
 {
-    String commandList = "<style>\
-                          .loading {\
-                            background-color: #f3f3f3;\
-                            cursor: not-allowed;\
-                          }\
-                          .spinner {\
-                            display: inline-block;\
-                            width: 40px;\
-                            height: 40px;\
-                            border: 5px solid rgba(0,0,0,.2);\
-                            border-top-color: #008000;\
-                            border-radius: 100%;\
-                            animation: spin 1s linear infinite;\
-                          }\
-                          @keyframes spin {\
-                            to { transform: rotate(360deg); }\
-                          }\
-                          .column {\
-                            width: 50%;\
-                            padding: 10px;\
-                            box-sizing: border-box;\
-                          }\
-                          .separator {\
-                            width: 2px;\
-                            background: #ddd;\
-                            height: 100%;\
-                            position: absolute;\
-                            left: 50%;\
-                            top: 0;\
-                          }\
-                          .left { float: left; }\
-                          .right { float: right; }\
-                          h1 { text-align: center; }\
-                          button {\
-                            font-size: 40px;\
-                            padding: 15px;\
-                            width: 90%;\
-                            box-sizing: border-box;\
-                            margin: 20px 5%;\
-                            border-radius: 25px;\
-                            transition: background-color 0.3s, transform 0.3s;\
-                          }\
-                          button:hover {\
-                            background-color: #ddd;\
-                          }\
-                          button:active {\
-                            transform: scale(0.95);\
-                          }\
-                          </style>\
-                          <div class='separator'></div>\
+    String commandList = css;
+
+    commandList += "<div class='separator'></div>\
                           <div class='column left'>\
                           <h1>Commands</h1>";
     for (Command &cmd : fetchCommands)
