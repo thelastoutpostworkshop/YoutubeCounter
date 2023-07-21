@@ -76,6 +76,7 @@ void handleDarthVaderBreathing(void);
 void handleDemoPlusOneSubscriber(void);
 void handleDemoMinusOneSubscriber(void);
 void handleDemoPlusTwoSubscriber(void);
+void handleConfigureYoutubeSettings(void);
 
 // List of external functions
 void showRainbow();
@@ -89,6 +90,7 @@ const char *playDarthVaderBreathingCommand = "/darth_vader";
 const char *demoPlusOneSubscriberCommand = "/demo_plus_one_subscriber";
 const char *demoMinusOneSubscriberCommand = "/demo_minus_one_subscriber";
 const char *demoPlusTwoSubscriberCommand = "/demo_plus_two_subscriber";
+const char *configureYoutubeSettingsCommand = "/youtube_settings";
 
 Command commands[] = {
     {"/", handleHello},
@@ -98,6 +100,7 @@ Command commands[] = {
     {demoPlusOneSubscriberCommand, handleDemoPlusOneSubscriber},
     {demoMinusOneSubscriberCommand, handleDemoMinusOneSubscriber},
     {demoPlusTwoSubscriberCommand, handleDemoPlusTwoSubscriber},
+    {configureYoutubeSettingsCommand, handleConfigureYoutubeSettings},
     //... add more commands as needed
 };
 
@@ -165,6 +168,24 @@ void handleHello(void)
                   "<p style='font-size: 24px;'>Connected to: " + String(ssid) + "</p>" +
                   "<p style='font-size: 24px;'><br/>" + commandsList() + "</p>";
     server.send(200, "text/html", body);
+}
+
+void handleConfigureYoutubeSettings(void)
+{
+    String html = "<html>\
+                    <body>\
+                      <form action=\"/store\" method=\"post\">\
+                        Channel ID:<br>\
+                        <input type=\"text\" name=\"channel_id\">\
+                        <br>\
+                        API Key:<br>\
+                        <input type=\"text\" name=\"api_key\">\
+                        <br><br>\
+                        <input type=\"submit\" value=\"Submit\">\
+                      </form>\
+                    </body>\
+                   </html>";
+    server.send(200, "text/html", html);
 }
 
 void handleDemoPlusOneSubscriber(void)
