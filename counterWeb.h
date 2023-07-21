@@ -42,6 +42,10 @@ const char *css = "<style>\
                           .left { float: left; }\
                           .right { float: right; }\
                           h1 { text-align: center; }\
+                          input[type=submit], input[type=file] {\
+                            font-size: 40px;\
+                            padding: 10px 20px;\
+                            }\
                           button {\
                             font-size: 40px;\
                             padding: 15px;\
@@ -226,9 +230,8 @@ void handleConfigureYoutubeSettings(void)
 {
     server.sendHeader("Connection", "close");
 
-    String html = "<html>\
-                   <body>\
-                     <form action='";
+    String html = css;
+    html += "<form action='";
     html += saveYoutubeSettingsEndpoint;
     html += "' method=\"post\">\
                        Channel ID:<br>\
@@ -238,9 +241,7 @@ void handleConfigureYoutubeSettings(void)
                        <input type=\"text\" name=\"api_key\">\
                        <br><br>\
                        <input type=\"submit\" value=\"Submit\">\
-                     </form>\
-                   </body>\
-                  </html>";
+                     </form>";
     server.send(200, "text/html", html);
 }
 
