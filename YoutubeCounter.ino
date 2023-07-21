@@ -29,6 +29,12 @@ Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 // Display
 TFT_eSPI tft = TFT_eSPI();
 
+// Sprites
+TFT_eSprite t_up = TFT_eSprite(&tft);
+TFT_eSprite t_down = TFT_eSprite(&tft);
+int t_down_positionX = 0;
+int t_down_direction = 1;
+
 // MP3 Player
 #define RXPIN 16
 #define TXPIN 17
@@ -113,6 +119,7 @@ void setup()
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showRainbow, 950000L);
+    scheduler.addTask(moveSprite, 3000);
 }
 
 void loop()
@@ -132,6 +139,42 @@ void loop()
         showSubscriberCount();
     }
 }
+
+// Create sprites
+void createSprites(void)
+{
+    t_up.createSprite(20, 20);        // Create a sprite of 40x40 pixels
+    t_up.fillSprite(TFT_TRANSPARENT); // Fill the sprite with a transparent color
+    // Draw the triangle inside the sprite
+    t_up.fillTriangle(10, 0, 0, 19, 19, 19, TFT_BLUE);
+
+    t_down.createSprite(20, 20);        // Create a sprite of 40x40 pixels
+    t_down.fillSprite(TFT_TRANSPARENT); // Fill the sprite with a transparent color
+    // Draw the triangle inside the sprite
+    t_down.fillTriangle(10, 19, 0, 0, 19, 0, TFT_BLUE);
+}
+
+void moveSprite()
+{
+    // Erase the old sprite by drawing it in transparent color
+    tft.fillRect(t_down_positionX, 0, 20, 20, TFT_BLACK);
+
+    t_down_positionX += t_down_direction * 20; // Move the sprite
+
+    // Check if the sprite hits the screen bounds
+    if (t_down_positionX >= (tft.width() - 20))
+    {                          // 480 should be replaced with your screen width
+        t_down_direction = -1; // Change direction to left
+    }
+    else if (t_down_positionX <= 0)
+    {
+        t_down_direction = 1; // Change direction to right
+    }
+
+    // Draw the sprite at the new position
+    t_down.pushSprite(t_down_positionX, 0);
+}
+
 // Increment the volume
 void incrementVolume()
 {
@@ -238,6 +281,7 @@ void initDisplay(void)
 {
     tft.begin();
     tft.setRotation(3);
+    createSprites();
     clearScreen();
 }
 
