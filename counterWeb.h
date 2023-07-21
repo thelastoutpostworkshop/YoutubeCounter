@@ -238,10 +238,10 @@ void handleConfigureYoutubeSettings(void)
     html += saveYoutubeSettingsEndpoint;
     html += "' method=\"post\">\
                        <label class='label'>Channel ID:</label><br>\
-                       <input type=\"text\" name=\"channel_id\">\
+                       <input type=\"text\" name=\"channel_id\" size=\"50\">\
                        <br>\
                        <label class='label'>API Key:</label><br>\
-                       <input type=\"text\" name=\"api_key\">\
+                       <input type=\"text\" name=\"api_key\" size=\"50\">\
                        <br><br>\
                        <input type=\"submit\" value=\"Submit\">\
                      </form>";
