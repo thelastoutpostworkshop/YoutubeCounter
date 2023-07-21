@@ -518,10 +518,10 @@ bool getYoutubeStatistics(int &subscriberCount)
 
     String url = "https://youtube.googleapis.com/youtube/v3/channels?part=statistics";
     url += "&id=";
-    url += CHANNEL_ID;
+    url += prefs.getString(channelIdPreference);
     url += "&fields=items/statistics/subscriberCount,items/statistics/viewCount";
     url += "&key=";
-    url += APIKEY;
+    url += prefs.getString(apiKeyPreference);
 
     http.begin(url);
     int httpResponseCode = http.GET();
