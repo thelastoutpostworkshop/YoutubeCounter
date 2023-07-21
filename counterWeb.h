@@ -42,6 +42,9 @@ const char *css = "<style>\
                           .left { float: left; }\
                           .right { float: right; }\
                           h1 { text-align: center; }\
+                          .label {\
+                            font-size: 40px;\
+                            }\
                           input {\
                             font-size: 40px;\
                             padding: 10px 20px;\
@@ -234,10 +237,10 @@ void handleConfigureYoutubeSettings(void)
     html += "<form action='";
     html += saveYoutubeSettingsEndpoint;
     html += "' method=\"post\">\
-                       Channel ID:<br>\
+                       <label class='label'>Channel ID:</label><br>\
                        <input type=\"text\" name=\"channel_id\">\
                        <br>\
-                       API Key:<br>\
+                       <label class='label'>API Key:</label><br>\
                        <input type=\"text\" name=\"api_key\">\
                        <br><br>\
                        <input type=\"submit\" value=\"Submit\">\
