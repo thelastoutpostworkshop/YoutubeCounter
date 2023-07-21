@@ -179,19 +179,20 @@ void handleConfigureYoutubeSettings(void)
 {
     server.sendHeader("Connection", "close");
 
-    String html = "<script>\
-                      <form action=\"/store\" method=\"post\">\
-                        Channel ID:<br>\
-                        <input type=\"text\" name=\"channel_id\">\
-                        <br>\
-                        API Key:<br>\
-                        <input type=\"text\" name=\"api_key\">\
-                        <br><br>\
-                        <input type=\"submit\" value=\"Submit\">\
-                      </form>\
-                   </script>";
-    // server.send(200, "text/html", html);
-    server.send(200, "text/html", htmlPageUpdate);
+    String html = "<html>\
+                   <body>\
+                     <form action=\"/store\" method=\"post\">\
+                       Channel ID:<br>\
+                       <input type=\"text\" name=\"channel_id\">\
+                       <br>\
+                       API Key:<br>\
+                       <input type=\"text\" name=\"api_key\">\
+                       <br><br>\
+                       <input type=\"submit\" value=\"Submit\">\
+                     </form>\
+                   </body>\
+                  </html>";
+    server.send(200, "text/html", html);
 }
 
 void handleDemoPlusOneSubscriber(void)
