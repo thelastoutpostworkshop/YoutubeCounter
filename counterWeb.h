@@ -98,8 +98,8 @@ Command fetchCommands[] = {
 };
 
 Command postCommands[] = {
-    {"Update", "/update", handleUpdate},
-    {"Configure Youtube Settings", "/youtube_settings", handleConfigureYoutubeSettings},
+    {"Upload code", "/update", handleUpdate},
+    {"Youtube settings", "/youtube_settings", handleConfigureYoutubeSettings},
 };
 
 const char *uploadEndpoint = "/upload";
@@ -131,9 +131,25 @@ String commandsList(void)
                           }\
                           .left { float: left; }\
                           .right { float: right; }\
+                          h2 { text-align: center; }\
+                          button {\
+                            font-size: 40px;\
+                            padding: 15px;\
+                            width: 90%;\
+                            box-sizing: border-box;\
+                            margin: 20px 5%;\
+                            border-radius: 25px;\
+                            transition: background-color 0.3s, transform 0.3s;\
+                          }\
+                          button:hover {\
+                            background-color: #ddd;\
+                          }\
+                          button:active {\
+                            transform: scale(0.95);\
+                          }\
                           </style>\
                           <div class='column left'>\
-                          <h2>Available Fetch Commands</h2>";
+                          <h1>Commands</h1>";
     for (Command &cmd : fetchCommands)
     {
         if (cmd.endpoint == "/update")
@@ -158,7 +174,7 @@ String commandsList(void)
     }
     commandList += "</div>\
                     <div class='column right'>\
-                    <h2>Available Post Commands</h2>";
+                    <h1>Settings</h1>";
     for (Command &cmd : postCommands)
     {
 
