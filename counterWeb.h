@@ -42,7 +42,7 @@ const char *css = "<style>\
                           .left { float: left; }\
                           .right { float: right; }\
                           h1 { text-align: center; }\
-                          input[type=submit], input[type=file] {\
+                          input {\
                             font-size: 40px;\
                             padding: 10px 20px;\
                             }\
