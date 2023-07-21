@@ -172,6 +172,7 @@ void handleHello(void)
 
 void handleConfigureYoutubeSettings(void)
 {
+    server.send(200, "text/plain");
     String html = "<html>\
                     <body>\
                       <form action=\"/store\" method=\"post\">\
