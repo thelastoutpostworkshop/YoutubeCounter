@@ -130,8 +130,8 @@ void loop()
 
     if (readRotaryPushButton())
     {
-        mp3.playTrackNumber(test, currentVolume, false);
-        test += 1;
+        currentSubscriberStatus = UNKNNOWN;
+        showCurrentSubscriberStatus();
     }
 
     if (interface.checkReset())
@@ -156,10 +156,10 @@ void createSprites(void)
 
 void moveSprite()
 {
-    static uint16_t bg[20 * 20];  // buffer to hold the pixels under the sprite
+    static uint16_t bg[20 * 20]; // buffer to hold the pixels under the sprite
 
     // If sprite moved at least once, restore the previous background
-    if (t_down_positionX > 0) 
+    if (t_down_positionX > 0)
     {
         tft.pushRect(t_down_positionX, 0, 20, 20, bg);
     }
@@ -182,7 +182,6 @@ void moveSprite()
     // Draw the sprite at the new position
     t_down.pushSprite(t_down_positionX, 0);
 }
-
 
 // Increment the volume
 void incrementVolume()
