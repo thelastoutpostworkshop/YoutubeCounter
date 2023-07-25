@@ -133,7 +133,6 @@ void loop()
     }
 }
 
-
 // Increment the volume
 void incrementVolume()
 {
@@ -271,6 +270,36 @@ void showRainbow(void)
         pixels.rainbow(0, i);
         pixels.show();
         delay(100);
+    }
+    pixels.clear();
+    pixels.show();
+}
+
+void showLoosingSubscriberPixels(void)
+{
+    unsigned long c = millis();
+
+    while (millis() - c < 4000)
+    {
+        for (int i = 0; i < pixels.numPixels(); i++)
+        {
+            int red = map(i, 0, pixels.numPixels(), 255, 0);
+            int green = map(i, 0, pixels.numPixels(), 0, 255);
+            int blue = 0;
+            pixels.setPixelColor(i, pixels.Color(red, green, blue));
+        }
+        pixels.show();
+        delay(50);
+
+        for (int i = 0; i < pixels.numPixels(); i++)
+        {
+            int red = map(i, 0, pixels.numPixels(), 0, 255);
+            int green = map(i, 0, pixels.numPixels(), 255, 0);
+            int blue = 0;
+            pixels.setPixelColor(i, pixels.Color(red, green, blue));
+        }
+        pixels.show();
+        delay(50);
     }
     pixels.clear();
     pixels.show();
@@ -490,8 +519,13 @@ void applyNewSubscriberCount(int newSubscriberCount)
             currentSubscriberCount = newSubscriberCount;
         }
         mp3.playTrackNumber(sound, currentVolume, false);
-        if(currentSubscriberStatus == GAINING) {
+        if (currentSubscriberStatus == GAINING)
+        {
             showRainbow();
+        }
+        else
+        {
+            showLoosingSubscriberPixels();
         }
         showSubscriberCount();
         showCurrentSubscriberStatus();
