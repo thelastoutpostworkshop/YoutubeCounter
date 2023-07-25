@@ -289,7 +289,7 @@ void showLoosingSubscriberPixels(void)
             pixels.setPixelColor(i, pixels.Color(red, green, blue));
         }
         pixels.show();
-        delay(50);
+        delay(150);
 
         for (int i = 0; i < pixels.numPixels(); i++)
         {
@@ -299,7 +299,7 @@ void showLoosingSubscriberPixels(void)
             pixels.setPixelColor(i, pixels.Color(red, green, blue));
         }
         pixels.show();
-        delay(50);
+        delay(150);
     }
     pixels.clear();
     pixels.show();
