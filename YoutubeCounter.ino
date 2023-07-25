@@ -283,7 +283,7 @@ void showLoosingSubscriberPixels(void)
     }
     pixels.show();
 
-    int c = millis();
+    unsigned long c = millis();
 
     while(millis()-c < 4000)
     {
@@ -294,6 +294,10 @@ void showLoosingSubscriberPixels(void)
 
     pixels.clear();
     pixels.show();
+}
+
+void showFastRandomPixels(void) {
+    
 }
 
 void showRandomRoundPixels(void)
