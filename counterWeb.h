@@ -157,7 +157,7 @@ void handleDemoPlusTwoSubscriber(void);
 void handleConfigureYoutubeSettings(void);
 
 // List of external functions and variables
-void showRainbow();
+void showRainbowPixels();
 void playDarthVadedBreathing(void);
 void applyNewSubscriberCount(int);
 void showFastRandomPixels(void);
@@ -289,7 +289,7 @@ void handleDemoPlusTwoSubscriber(void)
 }
 void handleShowRainbow(void)
 {
-    showRainbow();
+    showRainbowPixels();
     server.send(200);
 }
 void handleShowFastRandom(void)

@@ -265,6 +265,7 @@ void showSubscriberCount(void)
     drawTactical();
     drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
 }
+
 void showViewCount(void)
 {
     clearScreen();
@@ -273,7 +274,7 @@ void showViewCount(void)
     drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, counterColor);
 }
 
-void showRainbow(void)
+void showRainbowPixels(void)
 {
     for (int i = 1; i < 50; i++)
     {
@@ -532,7 +533,7 @@ void applyNewSubscriberCount(int newSubscriberCount)
         mp3.playTrackNumber(sound, currentVolume, false);
         if (currentSubscriberStatus == GAINING)
         {
-            showRainbow();
+            showRainbowPixels();
         }
         else
         {
