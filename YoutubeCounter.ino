@@ -18,7 +18,6 @@ uint16_t roundPixels[] = {1, 2, 3, 4, 5, 6};
 const int roundPixelsCount = 6;
 const int looseSubscriberPixel = 7;
 const int gainSubscriberPixel = 0;
-
 Adafruit_NeoPixel pixels(PIXELSCOUNT, PIXELSPIN, NEO_GRB + NEO_KHZ800);
 
 // Display
@@ -35,7 +34,6 @@ int soundGainingSubscriberCount = 5;
 int soundLoosingSubscriber = 3;
 int soundTwoPlusSubscriber = 9;
 int volumeChangeFeedback = 5;
-int test = 1;
 
 // Rotary Encoder
 #define Rotary_Clock 27
