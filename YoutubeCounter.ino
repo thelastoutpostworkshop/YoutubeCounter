@@ -455,7 +455,7 @@ void drawHTTPIndicator(uint32_t color)
     int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
     for (int i = 1; i <= 6; i++)
     {
-        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(20, 40), 10, 10, color);
+        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(10, 30), 10, 5, color);
     }
 }
 
