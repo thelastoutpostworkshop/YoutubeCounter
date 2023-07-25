@@ -573,6 +573,7 @@ void applyNewSubscriberCount(int newSubscriberCount)
     }
 }
 
+// Google Youtube API calls
 bool getYoutubeStatistics(int &subscriberCount)
 {
     HTTPClient http;
