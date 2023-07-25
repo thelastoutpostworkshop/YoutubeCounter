@@ -101,6 +101,7 @@ void setup()
     getYoutubeStatistics(currentSubscriberCount);
     playDarthVadedBreathing();
 
+    // Scheduled tasks in milliseconds
     scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
