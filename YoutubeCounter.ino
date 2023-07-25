@@ -47,7 +47,6 @@ enum Rotary_Status
     CLOCKWISE,
     COUNTERCLOCKWISE
 };
-
 int rotary_lastStateClock; // Store the PREVIOUS status of the clock pin (HIGH or LOW)
 unsigned long rotary_lastTimeButtonPress = 0;
 unsigned long rotary_lastTurn = 0;
@@ -55,6 +54,8 @@ unsigned long rotary_lastTurn = 0;
 // Fonts
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold30pt7b;
+
+// Colors
 const uint32_t counterColor = TFT_WHITE;
 
 // Youtube Statistics
@@ -62,11 +63,11 @@ int currentViewCount = -1;
 int currentSubscriberCount = -1;
 enum Subscriber_Status
 {
-    UNKNNOWN,
+    NOCHANGE,
     LOOSING,
     GAINING,
 };
-Subscriber_Status currentSubscriberStatus = UNKNNOWN;
+Subscriber_Status currentSubscriberStatus = NOCHANGE;
 
 // Interface activated by the Rotary Encoder
 InterfaceMode interface;
@@ -123,7 +124,7 @@ void loop()
 
     if (readRotaryPushButton())
     {
-        currentSubscriberStatus = UNKNNOWN;
+        currentSubscriberStatus = NOCHANGE;
         showCurrentSubscriberStatus();
     }
 
