@@ -1,4 +1,5 @@
-// Task scheduler
+// Class for the Task scheduler
+//
 class Task {
 public:
   typedef void (*taskCallback)(void);
