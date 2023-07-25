@@ -1,4 +1,4 @@
-// Web Functions
+// Web server Functions
 //
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -7,8 +7,12 @@
 #include <Update.h>
 #include "secrets.h"
 
+WebServer server(80);
+
+// Web server host name
 const char *hostName = "youtube";
 
+// CSS for the web application
 const char *css = "<style>\
                           .loading {\
                             background-color: #f3f3f3;\
@@ -135,9 +139,7 @@ const char *htmlPageUpdate =
     "});"
     "</script>";
 
-WebServer server(80);
-
-// Define a command structure
+// Structure to store commands available on the web application
 struct Command
 {
     const char *name;
@@ -145,7 +147,7 @@ struct Command
     void (*handler)();
 };
 
-// List of Commands
+// List of Commands available on the web application
 void handleHello(void);
 void handleUpdate(void);
 void handleShowRainbow(void);
@@ -156,7 +158,7 @@ void handleDemoMinusOneSubscriber(void);
 void handleDemoPlusTwoSubscriber(void);
 void handleConfigureYoutubeSettings(void);
 
-// List of external functions and variables
+// List of external functions and variables needed by the web application
 void showRainbowPixels();
 void playDarthVadedBreathing(void);
 void applyNewSubscriberCount(int);
@@ -166,6 +168,7 @@ extern Preferences prefs;
 extern const char *channelIdPreference;
 extern const char *apiKeyPreference;
 
+// Fetch commands name, route and handling function to be called
 Command fetchCommands[] = {
     {"Home", "/", handleHello},
     {"Rainbow", "/show_rainbow", handleShowRainbow},
@@ -176,14 +179,17 @@ Command fetchCommands[] = {
     {"Demo Add 2 Subscriber", "/demo_plus_two_subscriber", handleDemoPlusTwoSubscriber},
 };
 
+// Post commands name, route and handling function to be called
 Command postCommands[] = {
     {"Upload code", "/update", handleUpdate},
     {"Youtube settings", "/youtube_settings", handleConfigureYoutubeSettings},
 };
 
+// Functions to handle post data by the forms on the web application
 const char *uploadEndpoint = "/upload";
 const char *saveYoutubeSettingsEndpoint = "/save_youtube_settings";
 
+// Build a list of commands available to display on the web application
 String commandsList(void)
 {
     String commandList = css;
@@ -326,6 +332,7 @@ void handleNotFound()
     server.send(404, "text/plain", message);
 }
 
+// Setup of routes for handling requests coming from the web application
 void setupCommands(void)
 {
     // Register the command handlers with the web server
