@@ -147,6 +147,60 @@ void handleBrowserCalls(void * parameter)
     }
 }
 
+// Interface functions
+//
+void initRotaryEncoder(void)
+{
+    pinMode(Rotary_Clock, INPUT_PULLUP);
+    pinMode(Rotary_Data, INPUT_PULLUP);
+    pinMode(Rotary_PushButton, INPUT_PULLUP);
+    rotary_lastStateClock = digitalRead(Rotary_Clock);
+}
+
+boolean readRotaryPushButton(void)
+{
+    int buttonValue = digitalRead(Rotary_PushButton);
+    if (buttonValue == LOW)
+    {
+        if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
+        {
+            Serial.println("Button pressed!");
+            // Remember last button press event
+            rotary_lastTimeButtonPress = millis();
+            return true;
+        }
+    }
+    return false;
+}
+
+Rotary_Status readRotaryEncoder(void)
+{
+    Rotary_Status rotaryRead = NO_STATUS;
+    // Read the current state of CLK
+    int clockValue = digitalRead(Rotary_Clock);
+
+    // If last and current state of Rotary_Clock are different, then "pulse occurred"
+    // React to only 1 state change to avoid double count
+    if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
+    {
+        // If the Rotary_Data state is different than the Rotary_Clock state then
+        // the encoder is rotating "CCW" so we decrement
+        int data = digitalRead(Rotary_Data);
+        if (data != clockValue)
+        {
+            rotaryRead = CLOCKWISE;
+        }
+        else
+        {
+
+            rotaryRead = COUNTERCLOCKWISE;
+        }
+        rotary_lastTurn = millis();
+    }
+    rotary_lastStateClock = clockValue;
+    return rotaryRead;
+}
+
 void incrementVolume()
 {
     currentVolume++;
@@ -222,6 +276,15 @@ void readInterfaceThroughRotaryEncoder(void)
     }
 }
 
+// Display Functions
+//
+void initDisplay(void)
+{
+    tft.begin();
+    tft.setRotation(3);
+    clearScreen();
+}
+
 void drawTactical()
 {
     // Draw 6 vertical lines spaced evenly
@@ -245,13 +308,59 @@ void drawTactical()
     tft.drawEllipse(tft.width() / 4, tft.height() / 2, tft.width() / 3, tft.height() / 8, TFT_DARKGREEN);
 }
 
-void initDisplay(void)
+void showViewCount(void)
 {
-    tft.begin();
-    tft.setRotation(3);
     clearScreen();
+    drawTactical();
+    drawCenteredHorizontalText("ViewCount", 80, aurebeshText, TFT_DARKGREY);
+    drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, counterColor);
 }
 
+void drawHTTPIndicator(uint32_t color)
+{
+    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
+    for (int i = 1; i <= 6; i++)
+    {
+        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(10, 30), 10, 5, color);
+    }
+}
+
+void drawCenteredScreenText(const String &text, const GFXfont *f, uint32_t color)
+{
+    tft.setFreeFont(f);
+
+    Serial.println(text);
+
+    int displayWidth = tft.width();
+    int displayHeight = tft.height();
+
+    int textWidth = tft.textWidth(text);
+    int textHeight = 160; // tft.fontHeight();
+
+    int cursorX = (displayWidth - textWidth) / 2;
+    int cursorY = (displayHeight - textHeight) / 2;
+
+    tft.setTextColor(color);
+    tft.drawString(text, cursorX, cursorY);
+}
+void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, uint32_t color)
+{
+    tft.setFreeFont(f);
+
+    Serial.println(text);
+
+    int displayWidth = tft.width();
+
+    int textWidth = tft.textWidth(text);
+
+    int cursorX = (displayWidth - textWidth) / 2;
+
+    tft.setTextColor(color);
+    tft.drawString(text, cursorX, line);
+}
+
+// Neopixels functions
+//
 void initPixels(void)
 {
     pixels.begin();
@@ -259,19 +368,16 @@ void initPixels(void)
     pixels.show();
 }
 
+void clearScreen(void)
+{
+    tft.fillScreen(TFT_BLACK);
+}
+
 void showSubscriberCount(void)
 {
     clearScreen();
     drawTactical();
     drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
-}
-
-void showViewCount(void)
-{
-    clearScreen();
-    drawTactical();
-    drawCenteredHorizontalText("ViewCount", 80, aurebeshText, TFT_DARKGREY);
-    drawCenteredHorizontalText(String(currentViewCount), 160, aurebeshText, counterColor);
 }
 
 void showRainbowPixels(void)
@@ -345,19 +451,35 @@ void showRandomRoundPixels(void)
     showCurrentSubscriberStatus();
 }
 
-void clearScreen(void)
+void setColorAllRoundPixels(uint32_t color)
 {
-    tft.fillScreen(TFT_BLACK);
+    for (int i = 0; i < roundPixelsCount; i++)
+    {
+        pixels.setPixelColor(roundPixels[i], color);
+    }
 }
 
-void initRotaryEncoder(void)
+void showCurrentSubscriberStatus(void)
 {
-    pinMode(Rotary_Clock, INPUT_PULLUP);
-    pinMode(Rotary_Data, INPUT_PULLUP);
-    pinMode(Rotary_PushButton, INPUT_PULLUP);
-    rotary_lastStateClock = digitalRead(Rotary_Clock);
+    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
+    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
+
+    switch (currentSubscriberStatus)
+    {
+    case GAINING:
+        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 255, 0));
+        break;
+
+    case LOOSING:
+        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 0, 0));
+        /* code */
+        break;
+    }
+    pixels.show();
 }
 
+// MP3 Functions
+//
 void playDarthVadedBreathing(void)
 {
     uint32_t pause;
@@ -398,101 +520,8 @@ void playDarthVadedBreathing(void)
     showSubscriberCount();
 }
 
-void setColorAllRoundPixels(uint32_t color)
-{
-    for (int i = 0; i < roundPixelsCount; i++)
-    {
-        pixels.setPixelColor(roundPixels[i], color);
-    }
-}
-
-boolean readRotaryPushButton(void)
-{
-    int buttonValue = digitalRead(Rotary_PushButton);
-    if (buttonValue == LOW)
-    {
-        if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
-        {
-            Serial.println("Button pressed!");
-            // Remember last button press event
-            rotary_lastTimeButtonPress = millis();
-            return true;
-        }
-    }
-    return false;
-}
-
-Rotary_Status readRotaryEncoder(void)
-{
-    Rotary_Status rotaryRead = NO_STATUS;
-    // Read the current state of CLK
-    int clockValue = digitalRead(Rotary_Clock);
-
-    // If last and current state of Rotary_Clock are different, then "pulse occurred"
-    // React to only 1 state change to avoid double count
-    if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
-    {
-        // If the Rotary_Data state is different than the Rotary_Clock state then
-        // the encoder is rotating "CCW" so we decrement
-        int data = digitalRead(Rotary_Data);
-        if (data != clockValue)
-        {
-            rotaryRead = CLOCKWISE;
-        }
-        else
-        {
-
-            rotaryRead = COUNTERCLOCKWISE;
-        }
-        rotary_lastTurn = millis();
-    }
-    rotary_lastStateClock = clockValue;
-    return rotaryRead;
-}
-
-void drawHTTPIndicator(uint32_t color)
-{
-    int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
-    for (int i = 1; i <= 6; i++)
-    {
-        tft.fillRoundRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(10, 30), 10, 5, color);
-    }
-}
-
-void drawCenteredScreenText(const String &text, const GFXfont *f, uint32_t color)
-{
-    tft.setFreeFont(f);
-
-    Serial.println(text);
-
-    int displayWidth = tft.width();
-    int displayHeight = tft.height();
-
-    int textWidth = tft.textWidth(text);
-    int textHeight = 160; // tft.fontHeight();
-
-    int cursorX = (displayWidth - textWidth) / 2;
-    int cursorY = (displayHeight - textHeight) / 2;
-
-    tft.setTextColor(color);
-    tft.drawString(text, cursorX, cursorY);
-}
-void drawCenteredHorizontalText(const String &text, int line, const GFXfont *f, uint32_t color)
-{
-    tft.setFreeFont(f);
-
-    Serial.println(text);
-
-    int displayWidth = tft.width();
-
-    int textWidth = tft.textWidth(text);
-
-    int cursorX = (displayWidth - textWidth) / 2;
-
-    tft.setTextColor(color);
-    tft.drawString(text, cursorX, line);
-}
-
+// Youtube Statistics functions
+//
 void fetchSubscriberCount()
 {
     int subscriberCount;
@@ -542,25 +571,6 @@ void applyNewSubscriberCount(int newSubscriberCount)
         showSubscriberCount();
         showCurrentSubscriberStatus();
     }
-}
-
-void showCurrentSubscriberStatus(void)
-{
-    pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 0, 0));
-    pixels.setPixelColor(looseSubscriberPixel, pixels.Color(0, 0, 0));
-
-    switch (currentSubscriberStatus)
-    {
-    case GAINING:
-        pixels.setPixelColor(gainSubscriberPixel, pixels.Color(0, 255, 0));
-        break;
-
-    case LOOSING:
-        pixels.setPixelColor(looseSubscriberPixel, pixels.Color(255, 0, 0));
-        /* code */
-        break;
-    }
-    pixels.show();
 }
 
 bool getYoutubeStatistics(int &subscriberCount)
