@@ -112,7 +112,7 @@ void setup()
     scheduler.addTask(showRandomRoundPixels, 10000L);
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
-    scheduler.addTask(showRainbow, 950000L);
+    // scheduler.addTask(showRainbow, 950000L);
 }
 
 void loop()
@@ -490,6 +490,9 @@ void applyNewSubscriberCount(int newSubscriberCount)
             currentSubscriberCount = newSubscriberCount;
         }
         mp3.playTrackNumber(sound, currentVolume, false);
+        if(currentSubscriberStatus == GAINING) {
+            showRainbow();
+        }
         showSubscriberCount();
         showCurrentSubscriberStatus();
     }
