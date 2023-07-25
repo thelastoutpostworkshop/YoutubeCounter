@@ -11,10 +11,6 @@
 #include "font/Aurebesh_Bold80pt7b.h"
 #include "font/Aurebesh_Bold30pt7b.h"
 
-#ifdef __AVR__
-#include <avr/power.h>
-#endif
-
 // Neopixels
 #define PIXELSPIN 12
 #define PIXELSCOUNT 8
@@ -89,9 +85,6 @@ const char *apiKeyPreference = "api_key";
 
 void setup()
 {
-#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
-    clock_prescale_set(clock_div_1);
-#endif
     Serial.begin(115200);
     randomSeed(analogRead(0));
 
