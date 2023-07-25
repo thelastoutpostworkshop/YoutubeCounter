@@ -277,30 +277,21 @@ void showRainbow(void)
 
 void showLoosingSubscriberPixels(void)
 {
-    unsigned long c = millis();
-
-    while (millis() - c < 4000)
+    for (int i = 0; i < pixels.numPixels(); i++)
     {
-        for (int i = 0; i < pixels.numPixels(); i++)
-        {
-            int red = map(i, 0, pixels.numPixels(), 255, 0);
-            int green = map(i, 0, pixels.numPixels(), 0, 255);
-            int blue = 0;
-            pixels.setPixelColor(i, pixels.Color(red, green, blue));
-        }
-        pixels.show();
-        delay(150);
-
-        for (int i = 0; i < pixels.numPixels(); i++)
-        {
-            int red = map(i, 0, pixels.numPixels(), 0, 255);
-            int green = map(i, 0, pixels.numPixels(), 255, 0);
-            int blue = 0;
-            pixels.setPixelColor(i, pixels.Color(red, green, blue));
-        }
-        pixels.show();
-        delay(150);
+        pixels.setPixelColor(i, pixels.Color(255, 165, 0));
     }
+    pixels.show();
+
+    int c = millis();
+
+    while(millis()-c < 4000)
+    {
+        delay(50);
+        pixels.setBrightness(random(255));
+        pixels.show();
+    }
+
     pixels.clear();
     pixels.show();
 }
