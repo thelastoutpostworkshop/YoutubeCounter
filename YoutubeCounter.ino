@@ -3,14 +3,13 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
-#include "font/Aurebesh_Bold80pt7b.h"
-#include "font/Aurebesh_Bold40pt7b.h"
-#include "font/Aurebesh_Bold30pt7b.h"
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
 #include "interface.h"
 #include "darth_vader_helmet.h"
+#include "font/Aurebesh_Bold80pt7b.h"
+#include "font/Aurebesh_Bold30pt7b.h"
 
 #ifdef __AVR__
 #include <avr/power.h>
