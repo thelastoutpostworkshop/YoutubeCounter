@@ -1,3 +1,5 @@
+// Class Helper for the DFRobotDFPlayerMini library
+//
 #include "DFRobotDFPlayerMini.h"
 
 #define MP3_ERROR_ONLY 1
@@ -75,7 +77,6 @@ boolean MP3Player::playCompleted(void)
 }
 
 // Print the detail message from DFPlayer to handle different errors and states.
-//
 int MP3Player::serialPrintStatus(int verbose)
 {
     if (player.available())
