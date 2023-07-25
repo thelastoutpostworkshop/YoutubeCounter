@@ -285,7 +285,7 @@ void showLoosingSubscriberPixels(void)
 
     unsigned long c = millis();
 
-    while(millis()-c < 4000)
+    while (millis() - c < 4000)
     {
         delay(50);
         pixels.setBrightness(random(255));
@@ -296,8 +296,14 @@ void showLoosingSubscriberPixels(void)
     pixels.show();
 }
 
-void showFastRandomPixels(void) {
-    
+void showFastRandomPixels(void)
+{
+    unsigned long c = millis();
+    while (millis() - c < 10000)
+    {
+        showRandomRoundPixels();
+        delay(200);
+    }
 }
 
 void showRandomRoundPixels(void)

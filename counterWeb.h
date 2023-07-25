@@ -149,6 +149,7 @@ struct Command
 void handleHello(void);
 void handleUpdate(void);
 void handleShowRainbow(void);
+void handleShowFastRandom(void);
 void handleDarthVaderBreathing(void);
 void handleDemoPlusOneSubscriber(void);
 void handleDemoMinusOneSubscriber(void);
@@ -159,6 +160,7 @@ void handleConfigureYoutubeSettings(void);
 void showRainbow();
 void playDarthVadedBreathing(void);
 void applyNewSubscriberCount(int);
+void showFastRandomPixels(void);
 extern int currentSubscriberCount;
 extern Preferences prefs;
 extern const char *channelIdPreference;
@@ -167,6 +169,7 @@ extern const char *apiKeyPreference;
 Command fetchCommands[] = {
     {"Home", "/", handleHello},
     {"Rainbow", "/show_rainbow", handleShowRainbow},
+    {"Fast Random", "/show_fastrandom", handleShowFastRandom},
     {"Darth Vader Breathing", "/darth_vader", handleDarthVaderBreathing},
     {"Demo Add 1 Subscriber", "/demo_plus_one_subscriber", handleDemoPlusOneSubscriber},
     {"Demo Remove 1 Subscriber", "/demo_minus_one_subscriber", handleDemoMinusOneSubscriber},
@@ -287,6 +290,11 @@ void handleDemoPlusTwoSubscriber(void)
 void handleShowRainbow(void)
 {
     showRainbow();
+    server.send(200);
+}
+void handleShowFastRandom(void)
+{
+    showFastRandomPixels();
     server.send(200);
 }
 void handleDarthVaderBreathing(void)
