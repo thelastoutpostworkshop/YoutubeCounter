@@ -87,6 +87,7 @@ const char *volumePreference = "volume";
 const char *channelIdPreference = "channel_id";
 const char *apiKeyPreference = "api_key";
 
+
 void setup()
 {
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -113,11 +114,20 @@ void setup()
     scheduler.addTask(fetchSubscriberCount, 300000L);
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showFastRandomPixels, 950000L);
+
+    // create a new task on core 0
+    xTaskCreatePinnedToCore(
+        handleBrowserCalls,   /* Function to implement the task */
+        "handleBrowserCalls", /* Name of the task */
+        10000,        /* Stack size in words */
+        NULL,         /* Task input parameter */
+        1,            /* Priority of the task */
+        NULL,         /* Task handle. */
+        0);           /* Core where the task should run */
 }
 
 void loop()
 {
-    server.handleClient();
     scheduler.runTasks();
     readInterfaceThroughRotaryEncoder();
 
@@ -130,6 +140,15 @@ void loop()
     if (interface.checkReset())
     {
         showSubscriberCount();
+    }
+}
+
+void handleBrowserCalls(void * parameter)
+{
+    for(;;)
+    {
+        server.handleClient();
+        delay(1); // allow other tasks to run
     }
 }
 
