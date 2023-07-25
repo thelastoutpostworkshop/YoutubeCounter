@@ -1,3 +1,5 @@
+// Class to manage the interface activated with the Rotary Encoder
+//
 enum Interface_Mode
 {
     NORMAL,
