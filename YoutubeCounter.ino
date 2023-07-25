@@ -126,6 +126,8 @@ void loop()
 
     if (readRotaryPushButton())
     {
+        // To avoid capturing a rotary encoder turn when the button is pressed
+        rotary_lastTurn = millis();
         // User has acknowledge the change in subscriber count
         currentSubscriberStatus = NOCHANGE;
         showCurrentSubscriberStatus();
