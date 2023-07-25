@@ -72,7 +72,7 @@ Subscriber_Status currentSubscriberStatus = NOCHANGE;
 // Interface activated by the Rotary Encoder
 InterfaceMode interface;
 
-// Task Scheduler
+// Task Scheduler called in the Loop function
 TaskScheduler scheduler;
 
 // Preferences to store values into non-volatile memory
@@ -106,7 +106,8 @@ void setup()
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showFastRandomPixels, 950000L);
 
-    // create a new task on core 0
+    // Browser request will be handle by Core 0 for responsiveness
+    // Everything else runs on Core 1
     xTaskCreatePinnedToCore(
         handleBrowserCalls,   /* Function to implement the task */
         "handleBrowserCalls", /* Name of the task */
