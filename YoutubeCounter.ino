@@ -137,6 +137,7 @@ void loop()
     }
 }
 
+// This runs on core 0 for responsiveness
 void handleBrowserCalls(void * parameter)
 {
     for(;;)
@@ -166,21 +167,19 @@ void decrementVolume()
     prefs.putInt(volumePreference, currentVolume);
 }
 
+// Show the interface when the Rotary encoder is used
 void readInterfaceThroughRotaryEncoder(void)
 {
     Rotary_Status rotary = readRotaryEncoder();
     if (rotary != NO_STATUS)
     {
-
         switch (rotary)
         {
         case CLOCKWISE:
             interface.nextMode();
-
             break;
         case COUNTERCLOCKWISE:
             interface.prevMode();
-
             break;
         }
         switch (interface.getMode())
