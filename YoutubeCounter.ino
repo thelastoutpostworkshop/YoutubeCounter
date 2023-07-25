@@ -126,6 +126,7 @@ void loop()
 
     if (readRotaryPushButton())
     {
+        // User has acknowledge the change in subscriber count
         currentSubscriberStatus = NOCHANGE;
         showCurrentSubscriberStatus();
     }
@@ -145,7 +146,6 @@ void handleBrowserCalls(void * parameter)
     }
 }
 
-// Increment the volume
 void incrementVolume()
 {
     currentVolume++;
@@ -156,7 +156,6 @@ void incrementVolume()
     prefs.putInt(volumePreference, currentVolume);
 }
 
-// Decrement the volume
 void decrementVolume()
 {
     currentVolume--;
