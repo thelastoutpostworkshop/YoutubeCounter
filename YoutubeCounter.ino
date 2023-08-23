@@ -40,7 +40,7 @@ int volumeChangeFeedback = 5;
 #define Rotary_Data 26
 #define Rotary_PushButton 14
 #define PushButton_Debounce 200
-#define Rotary_Debounce 50
+#define Rotary_Debounce 150
 enum Rotary_Status
 {
     NO_STATUS,
