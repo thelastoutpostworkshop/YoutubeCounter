@@ -1,5 +1,5 @@
 #include <Adafruit_NeoPixel.h>
-#include <TFT_eSPI.h>
+#include <TFT_eSPI.h>  // Driver to use : ILI9488
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
@@ -28,7 +28,7 @@ TFT_eSPI tft = TFT_eSPI();
 #define TXPIN 17
 MP3Player mp3(RXPIN, TXPIN);
 int currentVolume = 15;
-int soundGainingSubscriber[] = {2, 3, 4, 6, 11};
+int soundGainingSubscriber[] = {2, 3, 4, 6, 11}; //Choosen randomly for more fun!
 int darthVaderBreathingSound = 12;
 int soundGainingSubscriberCount = 5;
 int soundLoosingSubscriber = 3;
@@ -130,6 +130,7 @@ void loop()
         rotary_lastTurn = millis();
         // User has acknowledge the change in subscriber count
         currentSubscriberStatus = NOCHANGE;
+        interface.setModeNormal();
         showCurrentSubscriberStatus();
     }
 

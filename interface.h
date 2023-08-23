@@ -35,6 +35,10 @@ public:
         lastChangeMillis = millis();
     }
 
+    void setModeNormal(void) {
+        mode = NORMAL;
+    }
+
     Interface_Mode getMode()
     {
         return mode;
