@@ -132,6 +132,7 @@ void loop()
         currentSubscriberStatus = NOCHANGE;
         interface.setModeNormal();
         showCurrentSubscriberStatus();
+        showSubscriberCount();
     }
 
     if (interface.checkReset())
@@ -273,6 +274,7 @@ void readInterfaceThroughRotaryEncoder(void)
                     break;
                 }
             }
+            interface.setModeNormal();
             showSubscriberCount();
             break;
         }
