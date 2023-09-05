@@ -28,9 +28,9 @@ TFT_eSPI tft = TFT_eSPI();
 #define TXPIN 17
 MP3Player mp3(RXPIN, TXPIN);
 int currentVolume = 15;
-int soundGainingSubscriber[] = {2, 3, 4, 6, 11}; //Choosen randomly for more fun!
+int soundGainingSubscriber[] = {2, 4, 6, 11}; //Choosen randomly for more fun!
 int darthVaderBreathingSound = 12;
-int soundGainingSubscriberCount = 5;
+int soundGainingSubscriberCount = 4;
 int soundLoosingSubscriber = 3;
 int soundTwoPlusSubscriber = 9;
 int volumeChangeFeedback = 5;
