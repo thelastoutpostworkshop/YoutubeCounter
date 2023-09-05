@@ -85,7 +85,6 @@ const char *apiKeyPreference = "api_key";
 void setup()
 {
     Serial.begin(115200);
-    randomSeed(analogRead(0));
 
     initPixels();
     initDisplay();
@@ -139,6 +138,11 @@ void loop()
     {
         showSubscriberCount();
     }
+}
+
+// Generates a true random value between minVal (inclusive) and maxVal (exclusive) using ESP32's hardware RNG.
+uint32_t espRandomInRange(uint32_t minVal, uint32_t maxVal) {
+    return (esp_random() % (maxVal - minVal)) + minVal;
 }
 
 // This runs on core 0 for responsiveness
@@ -322,7 +326,7 @@ void drawHTTPIndicator(uint32_t color)
     int lineSpacing = tft.width() / 7; // Divide by 7 to get 6 spaces
     for (int i = 1; i <= 6; i++)
     {
-        tft.fillRect((i - 1) * lineSpacing + 10, tft.height() - 10, random(15, 30), 10, color);
+        tft.fillRect((i - 1) * lineSpacing + 10, tft.height() - 10, espRandomInRange(15, 30), 10, color);
     }
 }
 
@@ -406,7 +410,7 @@ void showLoosingSubscriberPixels(void)
     while (millis() - c < 4000)
     {
         delay(50);
-        pixels.setBrightness(random(255));
+        pixels.setBrightness(espRandomInRange(0,255));
         pixels.show();
     }
 
@@ -442,7 +446,7 @@ void showRandomRoundPixels(void)
     for (int i = 0; i < numPixelsToChange; i++)
     {
         // Get a random index within the roundPixels array
-        int index = random(roundPixelsCount);
+        int index = espRandomInRange(0,roundPixelsCount);
         // Set the color of the pixel at the random index
         pixels.setPixelColor(roundPixels[index], pixels.Color(0, 0, 32));
     }
@@ -549,7 +553,7 @@ void applyNewSubscriberCount(int newSubscriberCount)
             }
             else
             {
-                sound = soundGainingSubscriber[random(soundGainingSubscriberCount)];
+                sound = soundGainingSubscriber[espRandomInRange(0,soundGainingSubscriberCount)];
             }
             currentSubscriberStatus = GAINING;
             currentSubscriberCount = newSubscriberCount;
