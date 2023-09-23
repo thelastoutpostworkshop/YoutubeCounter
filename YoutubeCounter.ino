@@ -547,7 +547,7 @@ void applyNewSubscriberCount(int newSubscriberCount)
     {
         if (newSubscriberCount > currentSubscriberCount)
         {
-            if (newSubscriberCount - currentSubscriberCount > 1)
+            if (newSubscriberCount - currentSubscriberCount > 1 && currentSubscriberCount < 1000)
             {
                 sound = soundTwoPlusSubscriber;
             }
