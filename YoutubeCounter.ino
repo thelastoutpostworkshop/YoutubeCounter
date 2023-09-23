@@ -1,7 +1,7 @@
-#include <Adafruit_NeoPixel.h>
-#include <TFT_eSPI.h>  // Driver to use : ILI9488
+#include <Adafruit_NeoPixel.h>  // Install with the library manager in the Arduino IDE
+#include <TFT_eSPI.h>           // Install with the library manager in the Arduino IDE -  Driver to use : ILI9488
 #include <HTTPClient.h>
-#include <ArduinoJson.h>
+#include <ArduinoJson.h>        // Install with the library manager in the Arduino IDE
 #include <Preferences.h>
 #include "counterWeb.h"
 #include "mp3tf16p.h"
