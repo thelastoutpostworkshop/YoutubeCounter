@@ -108,14 +108,14 @@ void setup()
 
     // Browser request will be handle by Core 0 for responsiveness
     // Everything else runs on Core 1
-    xTaskCreatePinnedToCore(
-        handleBrowserCalls,   /* Function to implement the task */
-        "handleBrowserCalls", /* Name of the task */
-        10000,        /* Stack size in words */
-        NULL,         /* Task input parameter */
-        1,            /* Priority of the task */
-        NULL,         /* Task handle. */
-        0);           /* Core where the task should run */
+    // xTaskCreatePinnedToCore(
+    //     handleBrowserCalls,   /* Function to implement the task */
+    //     "handleBrowserCalls", /* Name of the task */
+    //     10000,        /* Stack size in words */
+    //     NULL,         /* Task input parameter */
+    //     1,            /* Priority of the task */
+    //     NULL,         /* Task handle. */
+    //     0);           /* Core where the task should run */
 }
 
 void loop()
@@ -146,14 +146,14 @@ uint32_t espRandomInRange(uint32_t minVal, uint32_t maxVal) {
 }
 
 // This runs on core 0 for responsiveness
-void handleBrowserCalls(void * parameter)
-{
-    for(;;)
-    {
-        server.handleClient();
-        delay(1); // allow other tasks to run
-    }
-}
+// void handleBrowserCalls(void * parameter)
+// {
+//     for(;;)
+//     {
+//         server.handleClient();
+//         delay(1); // allow other tasks to run
+//     }
+// }
 
 // Interface functions
 //
