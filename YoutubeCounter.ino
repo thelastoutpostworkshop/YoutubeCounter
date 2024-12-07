@@ -1,10 +1,10 @@
 #include <Adafruit_NeoPixel.h>  // Install with the library manager in the Arduino IDE - Tested with version 1.12.3
-#include <TFT_eSPI.h>           // Install with the library manager in the Arduino IDE - Tested with version 2.5.43 Driver to use : ILI9488
 #include <HTTPClient.h>         // Included with Espressif ESP32 Core - Tested with version 3.0.7
 #include <ArduinoJson.h>        // Install with the library manager in the Arduino IDE - Tested with version 7.2.1
 #include <Preferences.h>        // Included with Espressif ESP32 Core - Tested with version 3.0.7
 #include <SimpleRotary.h>       // Install with the library manager in the Arduino IDE - Tested with version 1.1.3
 #include "counterWeb.h"
+#include <TFT_eSPI.h>           // Install with the library manager in the Arduino IDE - Tested with version 2.5.43 Driver to use : ILI9488
 #include "mp3tf16p.h"
 #include "scheduler.h"
 #include "interface.h"
@@ -96,16 +96,15 @@ void setup()
     scheduler.addTask(playDarthVadedBreathing, 3600000L);
     scheduler.addTask(showFastRandomPixels, 950000L);
 
-    // Browser request will be handle by Core 0 for responsiveness
-    // Everything else runs on Core 1
-    // xTaskCreatePinnedToCore(
-    //     handleBrowserCalls,   /* Function to implement the task */
-    //     "handleBrowserCalls", /* Name of the task */
-    //     10000,        /* Stack size in words */
-    //     NULL,         /* Task input parameter */
-    //     1,            /* Priority of the task */
-    //     NULL,         /* Task handle. */
-    //     0);           /* Core where the task should run */
+    // Browser request will be handle by a separate task
+    xTaskCreatePinnedToCore(
+        handleBrowserCalls,   /* Function to implement the task */
+        "handleBrowserCalls", /* Name of the task */
+        10000,        /* Stack size in words */
+        NULL,         /* Task input parameter */
+        1,            /* Priority of the task */
+        NULL,         /* Task handle. */
+        1);           /* Core where the task should run */
 }
 
 void loop()
@@ -134,14 +133,14 @@ uint32_t espRandomInRange(uint32_t minVal, uint32_t maxVal) {
 }
 
 // This runs on core 0 for responsiveness
-// void handleBrowserCalls(void * parameter)
-// {
-//     for(;;)
-//     {
-//         server.handleClient();
-//         delay(1); // allow other tasks to run
-//     }
-// }
+void handleBrowserCalls(void * parameter)
+{
+    for(;;)
+    {
+        server.handleClient();
+        delay(1); // allow other tasks to run
+    }
+}
 
 // Interface functions
 //
