@@ -1,8 +1,9 @@
-#include <Adafruit_NeoPixel.h>  // Install with the library manager in the Arduino IDE
-#include <TFT_eSPI.h>           // Install with the library manager in the Arduino IDE -  Driver to use : ILI9488
-#include <HTTPClient.h>
-#include <ArduinoJson.h>        // Install with the library manager in the Arduino IDE
-#include <Preferences.h>
+#include <Adafruit_NeoPixel.h>  // Install with the library manager in the Arduino IDE - Tested with version 1.12.3
+#include <TFT_eSPI.h>           // Install with the library manager in the Arduino IDE - Tested with version 2.5.43 Driver to use : ILI9488
+#include <HTTPClient.h>         // Included with Espressif ESP32 Core - Tested with version 3.0.7
+#include <ArduinoJson.h>        // Install with the library manager in the Arduino IDE - Tested with version 7.2.1
+#include <Preferences.h>        // Included with Espressif ESP32 Core - Tested with version 3.0.7
+#include <SimpleRotary.h>       // Install with the library manager in the Arduino IDE - Tested with version 1.1.3
 #include "counterWeb.h"
 #include "mp3tf16p.h"
 #include "scheduler.h"
@@ -36,20 +37,10 @@ int soundTwoPlusSubscriber = 9;
 int volumeChangeFeedback = 5;
 
 // Rotary Encoder
-#define Rotary_Clock 27
-#define Rotary_Data 26
-#define Rotary_PushButton 14
-#define PushButton_Debounce 200
-#define Rotary_Debounce 150
-enum Rotary_Status
-{
-    NO_STATUS,
-    CLOCKWISE,
-    COUNTERCLOCKWISE
-};
-int rotary_lastStateClock; // Store the PREVIOUS status of the clock pin (HIGH or LOW)
-unsigned long rotary_lastTimeButtonPress = 0;
-unsigned long rotary_lastTurn = 0;
+#define ROTARY_PIN_A 27
+#define ROTARY_PIN_B 26
+#define ROTARY_PUSH_BUTTON 14
+SimpleRotary rotary(ROTARY_PIN_A, ROTARY_PIN_B, ROTARY_PUSH_BUTTON);
 
 // Fonts
 const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
@@ -88,7 +79,6 @@ void setup()
 
     initPixels();
     initDisplay();
-    initRotaryEncoder();
     mp3.initialize();
 
     prefs.begin("youtube");
@@ -123,10 +113,8 @@ void loop()
     scheduler.runTasks();
     readInterfaceThroughRotaryEncoder();
 
-    if (readRotaryPushButton())
+    if (rotary.push() == 1)
     {
-        // To avoid capturing a rotary encoder turn when the button is pressed
-        rotary_lastTurn = millis();
         // User has acknowledge the change in subscriber count
         currentSubscriberStatus = NOCHANGE;
         interface.setModeNormal();
@@ -157,57 +145,6 @@ uint32_t espRandomInRange(uint32_t minVal, uint32_t maxVal) {
 
 // Interface functions
 //
-void initRotaryEncoder(void)
-{
-    pinMode(Rotary_Clock, INPUT_PULLUP);
-    pinMode(Rotary_Data, INPUT_PULLUP);
-    pinMode(Rotary_PushButton, INPUT_PULLUP);
-    rotary_lastStateClock = digitalRead(Rotary_Clock);
-}
-
-boolean readRotaryPushButton(void)
-{
-    int buttonValue = digitalRead(Rotary_PushButton);
-    if (buttonValue == LOW)
-    {
-        if (millis() - rotary_lastTimeButtonPress > PushButton_Debounce)
-        {
-            Serial.println("Button pressed!");
-            // Remember last button press event
-            rotary_lastTimeButtonPress = millis();
-            return true;
-        }
-    }
-    return false;
-}
-
-Rotary_Status readRotaryEncoder(void)
-{
-    Rotary_Status rotaryRead = NO_STATUS;
-    // Read the current state of CLK
-    int clockValue = digitalRead(Rotary_Clock);
-
-    // If last and current state of Rotary_Clock are different, then "pulse occurred"
-    // React to only 1 state change to avoid double count
-    if (clockValue != rotary_lastStateClock && clockValue == 1 && (millis() - rotary_lastTurn > Rotary_Debounce))
-    {
-        // If the Rotary_Data state is different than the Rotary_Clock state then
-        // the encoder is rotating "CCW" so we decrement
-        int data = digitalRead(Rotary_Data);
-        if (data != clockValue)
-        {
-            rotaryRead = CLOCKWISE;
-        }
-        else
-        {
-
-            rotaryRead = COUNTERCLOCKWISE;
-        }
-        rotary_lastTurn = millis();
-    }
-    rotary_lastStateClock = clockValue;
-    return rotaryRead;
-}
 
 void incrementVolume()
 {
@@ -232,15 +169,15 @@ void decrementVolume()
 // Show the interface when the Rotary encoder is used
 void readInterfaceThroughRotaryEncoder(void)
 {
-    Rotary_Status rotary = readRotaryEncoder();
-    if (rotary != NO_STATUS)
+    int rotary_Value = rotary.rotate();
+    if (rotary_Value != 0)
     {
-        switch (rotary)
+        switch (rotary_Value)
         {
-        case CLOCKWISE:
+        case 1:
             interface.nextMode();
             break;
-        case COUNTERCLOCKWISE:
+        case 2:
             interface.prevMode();
             break;
         }
@@ -257,19 +194,19 @@ void readInterfaceThroughRotaryEncoder(void)
             drawTactical();
             drawCenteredHorizontalText("Volume", 80, aurebeshText, TFT_DARKGREY);
             drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
-            while (!interface.checkReset() && !readRotaryPushButton())
+            while (!interface.checkReset() && rotary.push() == 0)
             {
-                rotary = readRotaryEncoder();
-                switch (rotary)
+                rotary_Value = rotary.rotate();
+                switch (rotary_Value)
                 {
-                case CLOCKWISE:
+                case 1:
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     incrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
                     mp3.playTrackNumber(volumeChangeFeedback, currentVolume, false);
                     interface.resetTime();
                     break;
-                case COUNTERCLOCKWISE:
+                case 2:
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, TFT_BLACK);
                     decrementVolume();
                     drawCenteredHorizontalText(String(currentVolume), 160, aurebeshText, counterColor);
