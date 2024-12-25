@@ -318,7 +318,18 @@ void showSubscriberCount(void)
 {
     clearScreen();
     drawTactical();
-    drawCenteredScreenText(String(currentSubscriberCount), aurebeshCounter, counterColor);
+
+    String displayCount;
+
+    // Format subscriber count
+    if (currentSubscriberCount >= 10000) {
+        float formattedCount = currentSubscriberCount / 1000.0; // Convert to thousands
+        displayCount = String(formattedCount, 1) + "K"; // 1 decimal place + "K"
+    } else {
+        displayCount = String(currentSubscriberCount); // Use the plain number for smaller counts
+    }
+
+    drawCenteredScreenText(displayCount, aurebeshCounter, counterColor);
 }
 
 void showRainbowPixels(void)
