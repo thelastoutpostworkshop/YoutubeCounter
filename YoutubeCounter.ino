@@ -11,6 +11,7 @@
 #include "darth_vader_helmet.h"
 #include "font/Aurebesh_Bold80pt7b.h"
 #include "font/Aurebesh_Bold30pt7b.h"
+#include "font/hansolov355pt7b.h"
 
 // Neopixels
 #define PIXELSPIN 12
@@ -43,7 +44,7 @@ int volumeChangeFeedback = 5;
 SimpleRotary rotary(ROTARY_PIN_A, ROTARY_PIN_B, ROTARY_PUSH_BUTTON);
 
 // Fonts
-const GFXfont *aurebeshCounter = &Aurebesh_Bold80pt7b;
+const GFXfont *aurebeshCounter = &hansolov355pt7b;
 const GFXfont *aurebeshText = &Aurebesh_Bold30pt7b;
 
 // Colors
